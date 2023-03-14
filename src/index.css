@@ -1,7 +1,7 @@
 img {
-  width: 930px;
-  height: 690px;
- 
+  max-width: 1500px;
+  max-height: 850px;
+  object-fit: fill; 
 }
 
 .center{
