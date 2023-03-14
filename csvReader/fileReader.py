@@ -10,7 +10,7 @@ def read_csv_data(filename):
         column_names = file.readline().strip().split(';')
 
     # read the data into a polars dataframe
-    df = pd.read_csv(filename, skiprows=5, delimiter=';', skipfooter=2, engine='python')
+    df = pd.read_csv(filename, skiprows=5, delimiter=';', skipfooter=2, engine='python', encoding="ISO-8859-1")
 
     return pl.from_pandas(df)
 

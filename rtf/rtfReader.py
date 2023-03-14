@@ -12,6 +12,7 @@ def readFile(fileToRead):
 dateGatheredString = 'Information generated:\\b0  '
 date = None
 searchFor = 'Date'
+country = None
 
 rows = []
 
@@ -32,10 +33,21 @@ for line in rtfLines:
         # We are looking for the data now and each line of data starts with a '{\b'
         # Use \\ as \ is an escape character so need to first escape it
         # Example: '{\b Albania}\par{\b R:} Burkina Faso\tab (12)\tab PM-43 120mm\tab mortar\tab (2011)\tab 2011\tab 12\tab Probably second-hand\par\pard\plain \s6\sb40\sl40\brdrt\brdrs'
-        if line[0:3] == '{\\b':
-            supplier = line.split('}\\par')[0].split('{\\b ')[1]
-            recipients = line.split('}\\par{\\b R:} ')[1].split('{\\b     } ')
-            country = None
+
+        # There are another format which starts with \par{\b, it is a kind of continue from the previous line.
+        # other formats basically the same, just keep the supplier read from the previous line
+        # and skip line.split('}\\par{\\b R:} ')[1] this
+        # Example: '\par{\b     } Iran\tab (413)\tab BMP-2\tab IFV\tab 1991\tab 1993-2001\tab (413)\tab 1500 ordered but probably only 413 delivered; 82 delivered direct, rest assembled in Iran; Iranian designation possibly BMT-2'
+        if line[0:3] == r'{\b' or line[0:7] == r"\par{\b":
+            if line[0:3] == '{\\b':
+                supplier = line.split('}\\par')[0].split('{\\b ')[1]
+                recipients = line.split('}\\par{\\b R:} ')[1].split('{\\b     } ')
+            else:
+                print(line[0:7])
+                recipients = line.split('{\\b     } ')[1:]
+
+            if line[0:7] == r"\par{\b":
+                print(recipients)
             for recipient in recipients:
                 # Two cases
                 # 1. Recipient contains a country
@@ -53,6 +65,7 @@ for line in rtfLines:
                 rows.append(
                     [element.strip() for element in row])
 
+
 # Hard Coded as getting the actual value is a bit of a pain
 df = polars.DataFrame(rows, schema=["Supplier", "Recipient", "Ordered", "No. Designation", "Weapon Description",
 
@@ -60,6 +73,7 @@ df = polars.DataFrame(rows, schema=["Supplier", "Recipient", "Ordered", "No. Des
 
 # TODO Set the type of the columns
 # print(df)
-csv_df = csvReader.fileReader. read_csv_data("../csvReader/DealsAndTIVs-2023-03-11-16_22_41 (1).txt")
+
+csv_df = csvReader.fileReader.read_csv_data("../csvReader/data.txt")
 joinedDF = csvReader.fileReader.joinedTable(df, csv_df)
-print(joinedDF)
+joinedDF.write_csv("joined_data.csv")
