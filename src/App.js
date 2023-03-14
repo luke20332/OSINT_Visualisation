@@ -39,7 +39,7 @@ export default function App() {
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
 
       <Slider
-        style={{ width:250, height: 40}}
+        style={{ width:1000, height: 40}}
         minimumValue = {1950}
         maximumValue = {2022}
         minimumTrackTintColor = 'tomato'
