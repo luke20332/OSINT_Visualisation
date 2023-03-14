@@ -50,7 +50,7 @@ for yr in range(int(yearMin),int(yearMax)+1):
         print("No data found for this range")
         #Some error
     else:
-        for i in range(6,len(response)):
+        for i in range(6,len(response)-2):
             file.write(response[i]+"\n")
         print(f"Data finished for {yr}")
 
