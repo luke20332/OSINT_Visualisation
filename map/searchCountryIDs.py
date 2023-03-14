@@ -11,10 +11,15 @@ def searchCountryIDs(id,ids):
         pass
     else:
         ids.append(id)
-        print(f"Found ID: {id}")
+        #print(f"Found ID: {id}")
 
 
 ids = []
-for i in range(0,9999999):
-    #1050486 - is a valid ID
+for i in range(1048759,1058759):
+    #1048759 is the earliest I could find thus far
+    #1058759 - is empty
     searchCountryIDs(i,ids)
+
+print("Done")
+with open('ids.txt', 'w') as file:
+    file.writelines(ids)
