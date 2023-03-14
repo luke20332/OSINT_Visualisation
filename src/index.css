@@ -1,6 +1,7 @@
 img {
   max-width: 1500px;
   max-height: 850px;
+  
   object-fit: fill; 
 }
 
