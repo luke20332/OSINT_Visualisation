@@ -5,7 +5,7 @@ function covert([lat, long]) {
     rad_long = long * Math.pi/180;
 
     x = R * rad_long;
-    y = R * Math.log((Math.tan((Math.pi)/4)+(((math.pi/2)-rad_lat)/2)));
+    y = R * Math.log((Math.tan((Math.pi)/4)+(((Math.pi/2)-rad_lat)/2)));
 
     ans = [x, y]
     console.log("function was called and the answer is: " + ans)
