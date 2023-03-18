@@ -11,3 +11,23 @@ function covert([lat, long]) {
     console.log("function was called and the answer is: " + ans)
     return ans;
 }
+
+// LongMin (XMin) LongMax (XMax) LatMin(YMin) LatMax(YMax)
+const LongLatMaxMin = [180,-180,90,-90]
+const imageWidth = 900; //px   
+const imageHeight = 750; //px
+const LongLatWidth = LongLatMaxMin[0] - LongLatMaxMin[1] // 360 - Longitude is X
+const LongLatHeight = LongLatMaxMin[2] - LongLatMaxMin[3] // 180 - Latitude is Y
+
+
+function convert([long,lat]){
+
+    width = (long-LongLatMaxMin[0])/LongLatWidth
+    height = (lat-LongLatMaxMin[2])/LongLatHeight
+    x = Math.floor(imageWidth * width)
+    y = Math.floor(imageHeight * (1-height))
+    cood = [x,y]
+    return cood;
+}
+
+//Reference https://towardsdatascience.com/geotiff-coordinate-querying-with-javascript-5e6caaaf88cf
