@@ -12,22 +12,28 @@ function covert([lat, long]) {
     return ans;
 }
 
-// LongMin (XMin) LongMax (XMax) LatMin(YMin) LatMax(YMax)
-const LongLatMaxMin = [180,-180,90,-90]
-const imageWidth = 900; //px   
-const imageHeight = 750; //px
-const LongLatWidth = LongLatMaxMin[0] - LongLatMaxMin[1] // 360 - Longitude is X
-const LongLatHeight = LongLatMaxMin[2] - LongLatMaxMin[3] // 180 - Latitude is Y
+// [minLong, minLat, maxLong, maxLat];
+var minLong = -85;
+var minLat = -90;
+var maxLong = 85;
+var maxLat = 90;
+var bbox = [minLong, minLat, maxLong, maxLat];
+var pixelWidth = 350;
+var pixelHeight = 350;
+var bboxWidth = bbox[2] - bbox[0];
+var bboxHeight = bbox[3] - bbox[1];
 
-
-function convert([long,lat]){
-
-    width = (long-LongLatMaxMin[0])/LongLatWidth
-    height = (lat-LongLatMaxMin[2])/LongLatHeight
-    x = Math.floor(imageWidth * width)
-    y = Math.floor(imageHeight * (1-height))
-    cood = [x,y]
-    return cood;
+var convertToXY = function(latitude, longitude) {
+    var widthPct = ( longitude - bbox[0] ) / bboxWidth;
+    var heightPct = ( latitude - bbox[1] ) / bboxHeight;
+    var x = Math.floor( pixelWidth * widthPct );
+    var y = Math.floor( pixelHeight * ( 1 - heightPct ) );
+    return { x, y };
 }
-
 //Reference https://towardsdatascience.com/geotiff-coordinate-querying-with-javascript-5e6caaaf88cf
+//Reference https://stackoverflow.com/questions/14329691/convert-latitude-longitude-point-to-a-pixels-x-y-on-mercator-projection
+
+
+//TODO
+//https://gis.stackexchange.com/questions/23321/where-can-i-download-a-good-world-image-in-geotiff
+//Check uploaded images
