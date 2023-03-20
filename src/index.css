@@ -1,0 +1,14 @@
+img {
+  max-width: 1500px;
+  max-height: 850px;
+  width: 900px;
+  height: 750px;  
+  object-fit: fill; 
+}
+
+.center{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
