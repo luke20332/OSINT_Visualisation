@@ -1,3 +1,4 @@
+import json
 import polars as pl
 
 df = pl.read_csv("../rtf/joined_data.csv")
@@ -24,8 +25,9 @@ category_mapping = {}
 
 # list of columns that required to be transferred to numeric data
 # keep country names (seller and buyer) away for now, can be added later
+# designation and comments were also omitted
 numerical_columns = ["Description", "Armament category",
-                     "Order date is estimate", "Numbers delivered",	"Numbers delivered is estimate",
+                     "Order date is estimate", "Numbers delivered is estimate",
                      "Delivery year is estimate", "Status",	"Local production"]
 
 for col_name in numerical_columns:
@@ -35,5 +37,10 @@ for col_name in numerical_columns:
         .apply(lambda x: (category_mapping[col_name].index(x)))]
     )
 
-print(category_mapping["Description"])
-df.write_csv("joined_data_numeric")
+
+# datetime_str = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+df.write_csv(f"joined_data_numeric.csv")
+with open('joined_data_numeric_table.json', 'w') as f:
+    # Write the dictionary to the file in JSON format
+    json.dump(category_mapping, f)
