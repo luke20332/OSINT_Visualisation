@@ -43,11 +43,8 @@ for line in rtfLines:
                 supplier = line.split('}\\par')[0].split('{\\b ')[1]
                 recipients = line.split('}\\par{\\b R:} ')[1].split('{\\b     } ')
             else:
-                print(line[0:7])
                 recipients = line.split('{\\b     } ')[1:]
 
-            if line[0:7] == r"\par{\b":
-                print(recipients)
             for recipient in recipients:
                 # Two cases
                 # 1. Recipient contains a country
