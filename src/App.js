@@ -47,8 +47,8 @@ export default function App() {
         thumbTintColor = 'tomato'
         value = {1950}
         onValueChange = {value => setRange(parseInt(value))}
-        //onSlidingStart={() => setSliding('Calculating...')}
-        //onSlidingComplete={() => [function here to calcuate the transfers]}
+        onSlidingStart={() => setSliding('Calculating...')}
+        onSlidingComplete={console.log(value)}
 
       />
       <StatusBar style = 'auto'/>
