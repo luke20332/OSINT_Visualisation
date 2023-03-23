@@ -20,8 +20,8 @@ data = data.drop(data.iloc[0])
 data = data.fillna(-1)
 data = data.replace(['...', 'xxx'], -1)
 
-# Read the data
-prio_df = pd.read_csv('OSINT_Visualisation\conflicts\\ucdp-prio-acd-221.csv', index_col=0, header=0)
+# Reading in UCDP data
+prio_df = pd.read_csv('OSINT_Visualisation\conflicts\\ucdp-prio-acd-221.csv', header=0)
 
 # Filtering UCDP data
 print(data.head())
@@ -33,16 +33,6 @@ remove_columns = ['incompatibility', 'territory_name', 'cumulative_intensity', '
        'gwno_b_2nd', 'gwno_loc', 'region', 'version']
 
 prio_df = prio_df.drop(remove_columns, axis=1)
-
-# Data Visualization
-# Plotting the data
-# plt.figure(figsize=(20,10))
-# sns.heatmap(data, cmap='coolwarm', linewidths=0.5, linecolor='black', annot=True, fmt='g')
-# plt.title('Military Expenditure by Country')
-# plt.xlabel('Year')
-# plt.ylabel('Country')
-# plt.show()
-
 
 
 # total military expenditure for each country
@@ -71,14 +61,31 @@ plt.ylabel('Total Military Expenditure')
 plt.xticks(rotation=90)
 plt.show()
 
+# ucdp average intensity per country
+ucdp_avg_intensity = prio_df.groupby('side_a')['intensity_level'].mean()
+print(ucdp_avg_intensity.head())
+ucdp_avg_intensity = ucdp_avg_intensity.sort_values(ascending=False)
 
+# Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_avg_intensity.index, y=ucdp_avg_intensity.values)
+plt.title('Average Intensity Level by Country')
+plt.xlabel('Country')
+plt.ylabel('Average Intensity Level')
+plt.xticks(rotation=90)
+plt.show()
 
+# UCDP number of conflicts per country
+ucdp_num_conflicts = prio_df.groupby('side_a')['conflict_id'].count()
+ucdp_num_conflicts = ucdp_num_conflicts.sort_values(ascending=False)
 
-
-
-
-
- 
-
+# Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_num_conflicts.index, y=ucdp_num_conflicts.values)
+plt.title('Number of Conflicts by Country')
+plt.xlabel('Country')
+plt.ylabel('Number of Conflicts')
+plt.xticks(rotation=90)
+plt.show()
 
 
