@@ -39,7 +39,17 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script src="latConverter.js">
+    <script src="https://cdn.jsdelivr.net/npm/geotiff"></script>
+    <script type="module" async>
+      const url = '%PUBLIC_URL%/NE1_LR_LC.tif';
+      const tiff = await GeoTIFF.fromUrl(url);
+      console.log(tiff);
+      const image = await tiff.getImage();
+      const width = image.getWidth();
+      const height = image.getHeight();
+      const imageData = await image.readRasters();
+      console.log(imageData);
+      console.log("Done");
     </script>
   </body>
 </html>
