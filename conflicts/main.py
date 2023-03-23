@@ -88,4 +88,15 @@ plt.ylabel('Number of Conflicts')
 plt.xticks(rotation=90)
 plt.show()
 
+# UCDP number of conflicts per year
+ucdp_num_conflicts_year = prio_df.groupby('year')['conflict_id'].count()
+ucdp_num_conflicts_year = ucdp_num_conflicts_year.sort_values(ascending=False)
 
+# Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_num_conflicts_year.index, y=ucdp_num_conflicts_year.values)
+plt.title('Number of Conflicts by Year')
+plt.xlabel('Year')
+plt.ylabel('Number of Conflicts')
+plt.xticks(rotation=90)
+plt.show()
