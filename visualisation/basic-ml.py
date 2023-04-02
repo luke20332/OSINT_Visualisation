@@ -6,7 +6,7 @@ import sklearn
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import plot_confusion_matrix
+#from sklearn.metrics import plot_confusion_matrix
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.svm import SVC
 from sklearn.datasets import make_moons
@@ -43,38 +43,75 @@ for x in new_dict.values():
 
 # plot the points - expenditure as a function of time
 
+keys = cleaned_dict.keys()
+values = cleaned_dict.values()
+
 fig, ax = plt.subplots(figsize=(6,4))
 #fig = plt.figure(figsize=(20,10))
-ax.scatter(cleaned_dict.keys(), cleaned_dict.values())
+ax.scatter(keys, values)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 plt.show()
 
 
-# time for some linear regression baby - doesnt work
+# time for some linear regression baby 
 
-"""
-x_bias = np.concatenate((np.ones(len(cleaned_dict)).reshape(-1,1), cleaned_dict.keys()), axis=1)
+x_bias = np.concatenate((np.ones(len(cleaned_dict)).reshape(-1,1), np.array(list(keys)).astype(float).reshape(-1,1)), axis=1)
 
-w_fit = np.linalg.lstsq(x_bias, cleaned_dict.values(), rcond=None)[0]
+
+w_fit = np.linalg.lstsq(x_bias, np.array(list(values)).astype(float), rcond=None)[0]
 
 y_pred = np.dot(x_bias, w_fit)
+
 
 print("w_1 = {:.2f}".format(w_fit[1].item()))
 print("b = {:.2f}".format(w_fit[0].item()))
 
 fig, ax = plt.subplots(figsize=(6,4))
-ax.scatter(cleaned_dict.keys(), cleaned_dict.values())
-ax.plot(x, y_pred, '-r')
+ax.scatter(keys, values)
+ax.plot(keys, y_pred, '-r')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-"""
+plt.show()
+
+
+# using sklearns built in linear regression function to determine the weights and biases of the regression line 
+
+regr = LinearRegression()
+regr.fit(np.array(list(keys)).astype(float).reshape(-1,1), np.array(list(values)).astype(float))
+print('w_1 = {:.2f}'.format(regr.coef_.item()))
+print('b = {:.2f}'.format(regr.intercept_.item()))
 
 # polynomial regression
 
-poly = PolynomialFeatures(degree=2)
-x_poly = poly.fit
+poly_underfit = PolynomialFeatures(degree=2)
+x_poly = poly_underfit.fit_transform(np.array(list(keys)).astype(float).reshape(-1,1))
+regr.fit(x_poly, np.array(list(values)))
+
+#x_plot = np.linspace(0,10,72).reshape(-1,1)
+y_pred = regr.predict(poly_underfit.transform(np.array(list(keys)).astype(float).reshape(-1,1)))
+
+fig,ax = plt.subplots(figsize=(6,4))
+ax.scatter(keys, values)
+ax.plot(keys, y_pred, '-r')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.show()
 
 
-print(cleaned_dict)
+
+poly_overfit = PolynomialFeatures(degree=6)
+x_poly = poly_overfit.fit_transform(np.array(list(keys)).astype(float).reshape(-1,1))
+regr.fit(x_poly, np.array(list(values)))
+
+#x_plot = np.linspace(0,10,72).reshape(-1,1)
+y_pred = regr.predict(poly_overfit.transform(np.array(list(keys)).astype(float).reshape(-1,1)))
+
+fig,ax = plt.subplots(figsize=(6,4))
+ax.scatter(keys, values)
+ax.plot(keys, y_pred, '-r')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.show()
+
 
