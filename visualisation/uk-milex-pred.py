@@ -135,13 +135,28 @@ plt.show()
 pred20 = poly_reg_model.predict(poly.transform([[2020]]))[0]
 print("predicted value of 2020 expenditure = {}".format(pred20))
 print("actual expenditure = {}".format(milex20))
-print("error = {}%".format((abs(milex20 - pred20)/milex20)*100))
-
-
-
+print("error = {}%".format((abs(milex20 - pred20)/milex20)*100))    
+  
 pred21 = poly_reg_model.predict(poly.transform([[2021]]))[0]
 print("predicted value of 2021 expenditure = {}".format(pred21))
 print("actual expenditure = {}".format(milex21))
 print("error = {}%".format((abs(milex21 - pred21)/milex21)*100))
 
+milex_forecast = [pred20, pred21]
+years_forecast = [2020, 2021]
+
+forecast_dict = cleaned_dict
+
+forecast_dict[2020] = pred20
+forecast_dict[2021] = pred21
+
+for i in range(9):
+    years_forecast.append(2021+i)
+    milex_forecast.append(poly_reg_model.predict(poly.transform([[2021+i]]))[0])
+    forecast_dict[2021+i] = poly_reg_model.predict(poly.transform([[2021+i]]))[0]
+
+
+appened_values = list(cleaned_dict.values()) + milex_forecast
+
+print(forecast_dict)
 #markov model?
