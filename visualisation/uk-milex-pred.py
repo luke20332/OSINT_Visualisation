@@ -142,21 +142,44 @@ print("predicted value of 2021 expenditure = {}".format(pred21))
 print("actual expenditure = {}".format(milex21))
 print("error = {}%".format((abs(milex21 - pred21)/milex21)*100))
 
-milex_forecast = [pred20, pred21]
-years_forecast = [2020, 2021]
+#milex_forecast = [pred20, pred21]
+years_forecast = list(keys) + [2020, 2021]
 
 forecast_dict = cleaned_dict
 
-forecast_dict[2020] = pred20
-forecast_dict[2021] = pred21
+#reconstruct original dataset
+forecast_dict[2020] = milex20
+forecast_dict[2021] = milex21
+print(len(years_forecast))
+print(len(forecast_dict))
 
-for i in range(9):
+
+for i in range(1,9):
     years_forecast.append(2021+i)
-    milex_forecast.append(poly_reg_model.predict(poly.transform([[2021+i]]))[0])
+    #milex_forecast.append(poly_reg_model.predict(poly.transform([[2021+i]]))[0])
     forecast_dict[2021+i] = poly_reg_model.predict(poly.transform([[2021+i]]))[0]
 
 
-appened_values = list(cleaned_dict.values()) + milex_forecast
 
-print(forecast_dict)
+
+#appended_values = list(cleaned_dict.values()) + milex_forecast
+
+
+
+poly_forecast = PolynomialFeatures(degree = 2, include_bias=False)
+
+poly_forecast_features = poly_forecast.fit_transform(np.array(years_forecast).reshape(-1,1))
+
+poly_forecast_reg_model = LinearRegression()
+poly_forecast_reg_model.fit(poly_forecast_features, np.array(list(forecast_dict.values())))
+
+x_forecast_vals = np.linspace(1950, 2029, 71).reshape(-1, 1)
+y_forecast_predicted = poly_forecast_reg_model.predict(poly_forecast.transform(x_forecast_vals))
+
+
+plt.figure()
+plt.scatter(years_forecast, list(forecast_dict.values()))
+#plt.plot(np.array(list(keys)), y_predicted, c = "red")
+plt.plot(x_forecast_vals, y_forecast_predicted, c = "red")
+plt.show()
 #markov model?
