@@ -1,7 +1,5 @@
 """
-In this file I will attempt multiple linear regression, with the feature variables being number of conflicts and total global expenditure, which have both been plotted as a function of time
-
-
+In this file I will do linear and polynomial regression, with the feature variable being global expenditure and the target being  number of conflicts, which have both been plotted as a function of time
 
 """
 
@@ -21,7 +19,9 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.feature_selection import r_regression
 import sklearn.cluster as cluster
+from sklearn.model_selection import train_test_split, cross_val_score
 
+from sklearn.linear_model import ElasticNet
 
 # Read the data
 data = pd.read_excel('conflicts\SIPRI-Milex-data-1949-2022.xlsx', sheet_name='Constant (2021) US$', index_col=0, header=5)
@@ -107,12 +107,15 @@ x_bias = np.concatenate((np.ones(73).reshape(-1,1), np.array(list(df['expenditur
 w_fit = np.linalg.lstsq(x_bias, df['conflict'], rcond=None)[0]
 y_pred = np.dot(x_bias, w_fit)
 
+"""
 fig,ax = plt.subplots(figsize=(6,4))
 ax.scatter(df['expenditure'],df['conflict'])
 ax.plot(df['expenditure'], y_pred, '-r')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 plt.show()
+
+"""
 
 pearsonsR = r_regression(np.array(list(df['expenditure'])).reshape(-1,1), df['conflict'])
 print("We get a Pearson's Correlation Coefficient of {}, which is suggests a strong positive correlation between global expenditure and total conflict around the world.".format(pearsonsR[0]))
@@ -125,6 +128,11 @@ print("We get a mean squared error of {} with a simple linear regression model".
 # polynomial regression model
 
 regr = LinearRegression()
+regr.fit(np.array(list(df['expenditure'])).reshape(-1,1), np.array(list(df['conflict'])).reshape(-1,1))
+
+print("Linear regression weight = {} ".format(regr.coef_.item()))
+print("Linear regression bias = {}".format(regr.intercept_.item()))
+
 poly = PolynomialFeatures(degree=4)
 x_poly = poly.fit_transform(np.array(list(df['expenditure'])).reshape(-1,1))
 regr.fit(x_poly, df['conflict'])
@@ -132,12 +140,14 @@ regr.fit(x_poly, df['conflict'])
 x_plot = np.linspace(min(df['expenditure']),max(df['expenditure']),73).reshape(-1, 1)
 y_pred_poly = regr.predict(poly.transform(x_plot))
 
+"""
 fig, ax = plt.subplots(figsize=(6,4))
 ax.scatter(df['expenditure'], df['conflict'])
 ax.plot(x_plot, y_pred_poly, '-r')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 plt.show()
+"""
 
 print("We get a mean squared error of {} with a polynomial linear regression model".format(mean_squared_error(df['conflict'],y_pred_poly)))
 
@@ -214,11 +224,41 @@ print(df['clusters'].value_counts())
 
 
 #export data with clusters
-#df.to_csv('milex-conflict-clusters.csv', index=False)
-
+#df.to_csv('milex-conflict-clusters.csv', index=False
+"""
 sns.scatterplot(x='expenditure', y='conflict', hue='clusters', data = df)
 plt.savefig('milex-conflict-clusters.png')
 plt.show()
+"""
+
+# cross validation
+
+x_train, x_test, y_train, y_test = train_test_split(df['expenditure'], df['conflict'], test_size=0.2, random_state=999)
+
+
+e_net = ElasticNet(alpha = 1.0, l1_ratio=0.5)
+
+e_net.fit(np.array(x_train).reshape(-1,1), np.array(y_train).reshape(-1,1))
+
+y_pred = e_net.predict(np.array(x_test).reshape(-1,1))
+
+print(y_pred)
+
+print("Slope: %.2f" % e_net.coef_[0])
+print("Intercept = {}".format(e_net.intercept_[0]))
+
+print("MSE = {}".format(mean_squared_error(y_test, y_pred)))
+
+
+x_plot = np.linspace(min(df['expenditure']),max(df['expenditure']),15).reshape(-1, 1)
+fig, ax = plt.subplots(figsize=(6,4))
+ax.scatter(df['expenditure'], df['conflict'])
+ax.plot(x_plot, y_pred, '-r')
+
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.show()
+
 
 # adjusting the dataframe to account for 'war prep'
 
