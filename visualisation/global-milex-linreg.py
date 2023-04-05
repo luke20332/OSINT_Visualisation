@@ -76,6 +76,10 @@ plt.xticks(rotation=90)
 regr = LinearRegression()
 regr.fit(np.array(list(total_mil_exp_year.index)).astype(float).reshape(-1,1), np.array(list(total_mil_exp_year.values)).astype(float))
 
+print("weight = {}".format(regr.coef_.item()))
+print("bias = {}".format(regr.intercept_.item()))
+
+
 poly = PolynomialFeatures(degree = 3, include_bias=False)
 
 poly_features = poly.fit_transform(np.array(list(total_mil_exp_year.index)).reshape(-1,1))
@@ -195,7 +199,7 @@ print(compound_data)
 
 plt.figure(figsize=(20,10))
 sns.barplot(x=compound_data.year, y=compound_data.total_expenditure)
-plt.title('Number of Conflicts by Year - Luke')
+plt.title('Global Expenditure by Year - Luke')
 plt.xlabel('Year')
 plt.ylabel('Number of Conflicts')
 plt.xticks(rotation=90)
