@@ -9,6 +9,7 @@ import sklearn
 from sklearn import *
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn.metrics import mean_squared_error
 
 # Read the data
 data = pd.read_excel('conflicts\SIPRI-Milex-data-1949-2022.xlsx', sheet_name='Constant (2021) US$', index_col=0, header=5)
@@ -75,7 +76,7 @@ plt.xticks(rotation=90)
 regr = LinearRegression()
 regr.fit(np.array(list(total_mil_exp_year.index)).astype(float).reshape(-1,1), np.array(list(total_mil_exp_year.values)).astype(float))
 
-poly = PolynomialFeatures(degree = 2, include_bias=False)
+poly = PolynomialFeatures(degree = 3, include_bias=False)
 
 poly_features = poly.fit_transform(np.array(list(total_mil_exp_year.index)).reshape(-1,1))
 
@@ -96,30 +97,108 @@ plt.show()
 #print(total_mil_exp_year.values[0]) #2021 value
 #print(pred22)
 
-total_mil_exp_year.to_dict()
+total_mil_exp_year_predict = total_mil_exp_year.to_dict()
 
 years_forecast = list(total_mil_exp_year.index)
 
 for i in range(1,9):
     years_forecast.append(2021+i)
     #milex_forecast.append(poly_reg_model.predict(poly.transform([[2021+i]]))[0])
-    total_mil_exp_year[2021+i] = poly_reg_model.predict(poly.transform([[2021+i]]))[0]
+    total_mil_exp_year_predict[2021+i] = poly_reg_model.predict(poly.transform([[2021+i]]))[0]
 
-total_mil_exp_year.to_dict()
+#total_mil_exp_year.to_dict()
 
-poly_forecast = PolynomialFeatures(degree = 2, include_bias=False)
+poly_forecast = PolynomialFeatures(degree = 3, include_bias=False)
 
 poly_forecast_features = poly_forecast.fit_transform(np.array(years_forecast).reshape(-1,1))
 
 poly_forecast_reg_model = LinearRegression()
-poly_forecast_reg_model.fit(poly_forecast_features, np.array(total_mil_exp_year.values))
+poly_forecast_reg_model.fit(poly_forecast_features, np.array(list(total_mil_exp_year_predict.values())))
 
 x_forecast_vals = np.linspace(1949, 2029, 81).reshape(-1, 1)
 y_forecast_predicted = poly_forecast_reg_model.predict(poly_forecast.transform(x_forecast_vals))
 
-
+# predict global military expenditure using the polynomial linear regression model learned from the data
+ 
 plt.figure()
-plt.scatter(years_forecast, list(total_mil_exp_year.values))
+plt.scatter(years_forecast, list(total_mil_exp_year_predict.values()))
 #plt.plot(np.array(list(keys)), y_predicted, c = "red")
 plt.plot(x_forecast_vals, y_forecast_predicted, c = "red")
 plt.show()
+
+
+print(len(total_mil_exp_year))
+#print("mean squared error = {}".format(mean_squared_error(total_mil_exp_year.values, y_forecast_predicted[10:])))
+
+# order = 2 -> mse = 508bn
+#order >= 3 -> mse = 481bn
+
+# number of total conflicts per year
+ucdp_num_conflicts_year = prio_df.groupby('year')['conflict_id'].count()
+ucdp_num_conflicts_year = ucdp_num_conflicts_year.sort_values(ascending=False)
+
+# Plotting the data
+
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_num_conflicts_year.index, y=ucdp_num_conflicts_year.values)
+plt.title('Number of Conflicts by Year - Ash')
+plt.xlabel('Year')
+plt.ylabel('Number of Conflicts')
+plt.xticks(rotation=90)
+#plt.show()
+
+
+#print(len(total_mil_exp_year.index[:71]))
+#print(len(total_mil_exp_year.values[:71]))
+#print(len(ucdp_num_conflicts_year.values[3:-2]))
+
+#total_mil_exp_year.index[:71]
+
+"""f = open("demo.txt", "a")
+f.write("hello world")
+f.write(str(ucdp_num_conflicts_year.index[3:-2]))
+f.write(str(total_mil_exp_year.values[:71]))
+f.write(str(ucdp_num_conflicts_year.values[3:-2]))"""
+
+#print(sorted(ucdp_num_conflicts_year.index[3:-2]))
+#print(sorted(total_mil_exp_year.index[:71])) # year index im using goes from 1951 to 2021
+#print(len(total_mil_exp_year.index[:71]))
+
+#print(ucdp_num_conflicts_year[:71])
+#total_mil_exp_year.index[:71]
+
+#print(ucdp_num_conflicts_year.sort_values('year').index)
+
+years = []
+for i in range(1950, 2022):
+    years.append(i)
+
+print(len(total_mil_exp_year.index))
+
+
+compound_data = pd.DataFrame(
+    {'year': total_mil_exp_year.index,
+     'total_expenditure': total_mil_exp_year.values,
+     }
+)
+
+#compound_data.sort_values('year')
+print("compound data")
+print(compound_data)
+
+# geeks for geeks method for linear regression
+
+# first Ill do a scatter plot to visualise the data
+
+# differs from the original plot done by ashiph - probably incorrect
+
+
+plt.figure(figsize=(20,10))
+sns.barplot(x=compound_data.year, y=compound_data.total_expenditure)
+plt.title('Number of Conflicts by Year - Luke')
+plt.xlabel('Year')
+plt.ylabel('Number of Conflicts')
+plt.xticks(rotation=90)
+plt.show()
+
+# some years are being cropped out for some reason.
