@@ -6,7 +6,7 @@ import polars as pl
 from pathlib import Path
 
 # Read the data
-data = pd.read_excel('OSINT_Visualisation\conflicts\SIPRI-Milex-data-1949-2022.xlsx', sheet_name='Constant (2021) US$', index_col=0, header=5)
+data = pd.read_excel('conflicts\SIPRI-Milex-data-1949-2022.xlsx', sheet_name='Constant (2021) US$', index_col=0, header=5)
 data = data.drop(['Unnamed: 1', 'Notes'], axis=1)
 
 # Unused index names:
@@ -21,7 +21,7 @@ data = data.fillna(-1)
 data = data.replace(['...', 'xxx'], -1)
 
 # Reading in UCDP data
-prio_df = pd.read_csv('OSINT_Visualisation\conflicts\\ucdp-prio-acd-221.csv', header=0)
+prio_df = pd.read_csv('conflicts\\ucdp-prio-acd-221.csv', header=0)
 
 
 # remove unnecessary columns
@@ -89,19 +89,19 @@ total_mil_exp = total_mil_exp.sort_values(ascending=False)
 # plt.show()
 
 # # UCDP number of conflicts per year
-# ucdp_num_conflicts_year = prio_df.groupby('year')['conflict_id'].count()
-# ucdp_num_conflicts_year = ucdp_num_conflicts_year.sort_values(ascending=False)
+ucdp_num_conflicts_year = prio_df.groupby('year')['conflict_id'].count()
+ucdp_num_conflicts_year = ucdp_num_conflicts_year.sort_values(ascending=False)
 
-# # Plotting the data
-# plt.figure(figsize=(20,10))
-# sns.barplot(x=ucdp_num_conflicts_year.index, y=ucdp_num_conflicts_year.values)
-# plt.title('Number of Conflicts by Year')
-# plt.xlabel('Year')
-# plt.ylabel('Number of Conflicts')
-# plt.xticks(rotation=90)
-# plt.show()
+ #Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_num_conflicts_year.index, y=ucdp_num_conflicts_year.values)#
+plt.title('Number of Conflicts by Year')
+plt.xlabel('Year')
+plt.ylabel('Number of Conflicts')
+plt.xticks(rotation=90)
+plt.show()
 
-
+"""
 # Kmeans clustering
 # Select the features for clustering
 from sklearn.cluster import KMeans
@@ -146,3 +146,4 @@ dendrogram(mergings,
                         )
 plt.show()
 
+"""
