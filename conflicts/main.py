@@ -39,7 +39,20 @@ print(prio_df.head())
 total_mil_exp = data.sum(axis=1)
 total_mil_exp = total_mil_exp.sort_values(ascending=False)
 
-# Plotting the data
+print(total_mil_exp.head(10))
+
+# export prio_df to csv
+# prio_df.to_csv('OSINT_Visualisation\conflicts\\prio_df.csv', index=False)
+#  export data to csv
+# data.to_csv('OSINT_Visualisation\conflicts\\data.csv', index=True)
+
+
+
+# export total_mil_exp to csv
+
+
+######################################
+# DATA EXPLORATION:
 # plt.figure(figsize=(20,10))
 # sns.barplot(x=total_mil_exp.index, y=total_mil_exp.values)
 # plt.title('Total Military Expenditure by Country')
@@ -100,6 +113,10 @@ total_mil_exp = total_mil_exp.sort_values(ascending=False)
 # plt.ylabel('Number of Conflicts')
 # plt.xticks(rotation=90)
 # plt.show()
+######################################
+# Frequency of conflicts by country
+ucdp_num_conflicts = prio_df.groupby('side_a')['conflict_id'].count()
+ucdp_num_conflicts = ucdp_num_conflicts.sort_values(ascending=False)
 
 
 # Kmeans clustering
@@ -130,19 +147,5 @@ plt.xlabel('Year')
 plt.ylabel('Intensity Level')
 plt.show()
 
-# Hierarchical clustering
-# Import the linkage and dendrogram functions
-from scipy.cluster.hierarchy import linkage, dendrogram
 
-# Specify the linkage type
-mergings = linkage(X, method='complete')
-
-# Plot the dendrogram, using varieties as labels
-plt.figure(figsize=(20,10))
-dendrogram(mergings,
-                  labels=prio_df['side_a'].values,
-                        leaf_rotation=90,
-                        leaf_font_size=6,
-                        )
-plt.show()
 
