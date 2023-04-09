@@ -1,5 +1,7 @@
 import json
 import csv
+import sys
+csv.field_size_limit(int(sys.maxsize/10000000000))
 
 #Open the txt as 
 data = []
