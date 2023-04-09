@@ -71,6 +71,11 @@ df = polars.DataFrame(rows, schema=["Supplier", "Recipient", "Ordered", "No. Des
 # TODO Set the type of the columns
 # print(df)
 
+# find if the unique values in 'col1' contain '-'
+contains_dash = df["Year(s) Weapon of Order"].str.contains('-').unique()
+
+print(contains_dash)
+
 csv_df = csvReader.fileReader.read_csv_data("../csvReader/data.txt")
 joinedDF = csvReader.fileReader.joinedTable(df, csv_df)
 joinedDF.write_csv("joined_data.csv")
