@@ -18,10 +18,9 @@ with open('countryList.csv', 'r',encoding="utf-8") as file:
                 #If the key is already in the list, skip it as we already have it
                 if key in cleanedPrimaryKeys:
                     continue
-                else:
-                    #Otherwise add it to both lists
-                    cleanedPrimaryKeys.append(key)
-                    cleanedRows.append(row)
+                #Otherwise add it to both lists
+                cleanedPrimaryKeys.append(key)
+                cleanedRows.append(row)
 
 with open('countryListCleaned.csv', 'w',encoding="utf-8") as file:
      writer = csv.writer(file)

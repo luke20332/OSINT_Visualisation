@@ -12,14 +12,17 @@ with open('idsJson.txt', 'r',encoding="utf-8") as file:
 #get list of countries in the data
 with open('countryList.csv', 'w',encoding="utf-8") as file:
     writer = csv.writer(file)
-    writer.writerow(["id","name","start","end","polygon","abbr","type"])
+    writer.writerow(["id","name","start","end","polygon","abbr"])
 
     for i in range(len(data)):
         name = data[i]["title"]
         dateStart = data[i]["from"]
         dateEnd = data[i]["to"]
-        polygon = data[i]["poly"]
+        polygon = (data[i]["poly"]).replace(",",";")
         id = data[i]["opts"]["id"]
         abbr = data[i]["abbr"]
-        civType = data[i]["opts"]["type"]
-        writer.writerow([id,name,dateStart,dateEnd,polygon,abbr,civType])
+        typeCheck = data[i]["opts"]["type"]
+        if typeCheck == 0:
+            print("Skipping " + name + " as it is not a country")
+            continue
+        writer.writerow([id,name,dateStart,dateEnd,polygon,abbr])
