@@ -4,6 +4,8 @@ import map from "./wrld-15-crop.jpg"
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
+import handleSubmit from './handles/handlesubmit';
+import { useRef } from 'react';
 
 
 // root of application
@@ -29,6 +31,13 @@ export default function App() {
   
   const [range, setRange] = useState('1950');
   const [sliding, setSliding] = useState('');
+  const dataref = useRef()
+
+  const submitHandler = (e) => {
+    e.preventdefault()
+    handleSubmit(dataref.current.value)
+    dataref.current.value = "bitch"
+  }
 
   
 
@@ -68,3 +77,4 @@ const styles = StyleSheet.create({
 });
 
 //export default App;
+
