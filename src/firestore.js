@@ -16,7 +16,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 const databseref = firebase.database().ref()
-export const  notesref = databseref.child("notes")
+export const datasref = databseref.child("data")
 export default firebase
 
 var admin = require("firebase-admin");
