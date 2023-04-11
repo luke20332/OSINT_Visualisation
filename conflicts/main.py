@@ -47,105 +47,102 @@ print(total_mil_exp.head(10))
 # data.to_csv('OSINT_Visualisation\conflicts\\data.csv', index=True)
 
 
-
-# export total_mil_exp to csv
-
-
 ######################################
 # DATA EXPLORATION:
-# plt.figure(figsize=(20,10))
-# sns.barplot(x=total_mil_exp.index, y=total_mil_exp.values)
-# plt.title('Total Military Expenditure by Country')
-# plt.xlabel('Country')
-# plt.ylabel('Total Military Expenditure')
-# plt.xticks(rotation=90)
-# plt.show()
+plt.figure(figsize=(20,10))
+sns.barplot(x=total_mil_exp.index, y=total_mil_exp.values)
+plt.title('Total Military Expenditure by Country')
+plt.xlabel('Country')
+plt.ylabel('Total Military Expenditure')
+plt.xticks(rotation=90)
+plt.show()
 
-# # total military expenditure for each year
-# total_mil_exp_year = data.sum(axis=0)
-# total_mil_exp_year = total_mil_exp_year.sort_values(ascending=False)
+# total military expenditure for each year
+total_mil_exp_year = data.sum(axis=0)
+total_mil_exp_year = total_mil_exp_year.sort_values(ascending=False)
 
-# # Plotting the data
-# plt.figure(figsize=(20,10))
-# sns.barplot(x=total_mil_exp_year.index, y=total_mil_exp_year.values)
-# plt.title('Total Military Expenditure by Year')
-# plt.xlabel('Year')
-# plt.ylabel('Total Military Expenditure')
-# plt.xticks(rotation=90)
-# plt.show()
+# Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=total_mil_exp_year.index, y=total_mil_exp_year.values)
+plt.title('Total Military Expenditure by Year')
+plt.xlabel('Year')
+plt.ylabel('Total Military Expenditure')
+plt.xticks(rotation=90)
+plt.show()
 
-# # ucdp average intensity per country
-# ucdp_avg_intensity = prio_df.groupby('side_a')['intensity_level'].mean()
-# print(ucdp_avg_intensity.head())
-# ucdp_avg_intensity = ucdp_avg_intensity.sort_values(ascending=False)
+# ucdp average intensity per country
+ucdp_avg_intensity = prio_df.groupby('side_a')['intensity_level'].mean()
+print(ucdp_avg_intensity.head())
+ucdp_avg_intensity = ucdp_avg_intensity.sort_values(ascending=False)
 
-# # Plotting the data
-# plt.figure(figsize=(20,10))
-# sns.barplot(x=ucdp_avg_intensity.index, y=ucdp_avg_intensity.values)
-# plt.title('Average Intensity Level by Country')
-# plt.xlabel('Country')
-# plt.ylabel('Average Intensity Level')
-# plt.xticks(rotation=90)
-# plt.show()
+# Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_avg_intensity.index, y=ucdp_avg_intensity.values)
+plt.title('Average Intensity Level by Country')
+plt.xlabel('Country')
+plt.ylabel('Average Intensity Level')
+plt.xticks(rotation=90)
+plt.show()
 
-# # UCDP number of conflicts per country
-# ucdp_num_conflicts = prio_df.groupby('side_a')['conflict_id'].count()
-# ucdp_num_conflicts = ucdp_num_conflicts.sort_values(ascending=False)
-
-# # Plotting the data
-# plt.figure(figsize=(20,10))
-# sns.barplot(x=ucdp_num_conflicts.index, y=ucdp_num_conflicts.values)
-# plt.title('Number of Conflicts by Country')
-# plt.xlabel('Country')
-# plt.ylabel('Number of Conflicts')
-# plt.xticks(rotation=90)
-# plt.show()
-
-# # UCDP number of conflicts per year
-# ucdp_num_conflicts_year = prio_df.groupby('year')['conflict_id'].count()
-# ucdp_num_conflicts_year = ucdp_num_conflicts_year.sort_values(ascending=False)
-
-# # Plotting the data
-# plt.figure(figsize=(20,10))
-# sns.barplot(x=ucdp_num_conflicts_year.index, y=ucdp_num_conflicts_year.values)
-# plt.title('Number of Conflicts by Year')
-# plt.xlabel('Year')
-# plt.ylabel('Number of Conflicts')
-# plt.xticks(rotation=90)
-# plt.show()
-######################################
-# Frequency of conflicts by country
+# UCDP number of conflicts per country
 ucdp_num_conflicts = prio_df.groupby('side_a')['conflict_id'].count()
 ucdp_num_conflicts = ucdp_num_conflicts.sort_values(ascending=False)
+
+# Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_num_conflicts.index, y=ucdp_num_conflicts.values)
+plt.title('Number of Conflicts by Country')
+plt.xlabel('Country')
+plt.ylabel('Number of Conflicts')
+plt.xticks(rotation=90)
+plt.show()
+
+# UCDP number of conflicts per year
+ucdp_num_conflicts_year = prio_df.groupby('year')['conflict_id'].count()
+ucdp_num_conflicts_year = ucdp_num_conflicts_year.sort_values(ascending=False)
+
+# Plotting the data
+plt.figure(figsize=(20,10))
+sns.barplot(x=ucdp_num_conflicts_year.index, y=ucdp_num_conflicts_year.values)
+plt.title('Number of Conflicts by Year')
+plt.xlabel('Year')
+plt.ylabel('Number of Conflicts')
+plt.xticks(rotation=90)
+plt.show()
+######################################
+# Frequency of conflicts by country
+
+
+
 
 
 # Kmeans clustering
 # Select the features for clustering
-from sklearn.cluster import KMeans
-X = prio_df[['year', 'intensity_level']]
+# from sklearn.cluster import KMeans
+# X = prio_df[['year', 'intensity_level']]
 
-# Specify the number of clusters
-n_clusters = 3
+# # Specify the number of clusters
+# n_clusters = 3
 
-# Initialize the KMeans model
-kmeans = KMeans(n_clusters=n_clusters, random_state=0)
+# # Initialize the KMeans model
+# kmeans = KMeans(n_clusters=n_clusters, random_state=0)
 
-# Fit the model to the data
-kmeans.fit(X)
+# # Fit the model to the data
+# kmeans.fit(X)
 
-# Get the cluster labels
-labels = kmeans.labels_
+# # Get the cluster labels
+# labels = kmeans.labels_
 
-# Add the labels to the original dataframe
-prio_df['cluster'] = labels
+# # Add the labels to the original dataframe
+# prio_df['cluster'] = labels
 
-# Plot the data
-plt.figure(figsize=(20,10))
-sns.scatterplot(x=prio_df['year'], y=prio_df['intensity_level'], hue=prio_df['cluster'])
-plt.title('KMeans Clustering')
-plt.xlabel('Year')
-plt.ylabel('Intensity Level')
-plt.show()
+# # Plot the data
+# plt.figure(figsize=(20,10))
+# sns.scatterplot(x=prio_df['year'], y=prio_df['intensity_level'], hue=prio_df['cluster'])
+# plt.title('KMeans Clustering')
+# plt.xlabel('Year')
+# plt.ylabel('Intensity Level')
+# plt.show()
 
 
 
