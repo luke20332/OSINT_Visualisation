@@ -24,8 +24,17 @@ with open('idsJson.txt', 'w',encoding="utf-8") as file:
         print(idString)
         time.sleep(10) #So I dont get timed out
 
-    file.seek(-1, os.SEEK_CUR) #Go back a char
-    file.write("]") #Overwrite the last comma
+    file.write("]") 
+
+#Remove the last comma
+text = ""
+with open('idsJson.txt', 'r',encoding="utf-8") as file:
+    text = file.read()
+    text = text.removesuffix("]")
+    text = text.removesuffix(",")
+    text += "]"
+with open('idsJson.txt', 'w',encoding="utf-8") as file:
+    file.write(text)
 
 
 print("done")
