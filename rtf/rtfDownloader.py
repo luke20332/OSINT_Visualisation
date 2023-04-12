@@ -14,34 +14,36 @@ soup = bs(htmlResponse, 'html.parser')
 
 #print(soup)
 
-years = soup.find_all("select", {"name":"low_year"})[0].find_all("option")
-yearMax = years[1].text
-yearMin = years[-1].text
-
-#print(soup)
+low_years = soup.find_all("select", {"name":"low_year"})[0].find_all("option")
+yearMax = low_years[1].text
+yearMin = low_years[-1].text
 
 old_from_year = soup.find(value="2022")
 del old_from_year['selected']
 
-#soup.find('option')['selected'] = "1950"
 
 new_from_year = soup.find(value="1950")
 new_from_year["selected"] = 1950
 
-print(new_from_year)
+
+# may not need to change the 2nd drop down menu since the old_from year changes the low_year, but the high_year remains the same as the current high year.
+
+request_url = "https://armstrade.sipri.org/armstrade/html/export_trade_register.php"
+payload = {'include_open_deals': 'on',
+           'seller_country_code' : "",
+           'buyer_country_code' : "",
+           'low_year' : 1950,
+           'high_year' : 2022,
+           'armament_category_id': 'any',
+           'buyers_or_sellers' : 'sellers',
+           'filetype' : 'rtf',
+           'sum_deliveries' : 'on',
+           'Submit4' : "Download"
+           }
 
 
-print(soup)
-
-#from_year['selected'] = 1950
-
-#print(from_year)
-#print(from_year['selected'].text)
-
-#low_year['selected'] = "1950"
-
-
-
+r = requests.post(request_url, data=payload)
+print(r.text)
 
 """
 file = open("date.txt","r")
