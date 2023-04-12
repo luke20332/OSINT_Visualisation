@@ -74,13 +74,13 @@ num_conflicts_location = num_conflicts_location.sort_values(by='Number of Confli
 # print(num_conflicts_location.head())
 
 # Plot the number of conflicts per location
-plt.figure(figsize=(20, 10))
-plt.title('Number of Conflicts per Location')
-plt.xlabel('Location')
-plt.ylabel('Number of Conflicts')
-plt.xticks(rotation=90)
-plt.bar(num_conflicts_location.index, num_conflicts_location['Number of Conflicts'])
-plt.show()
+# plt.figure(figsize=(20, 10))
+# plt.title('Number of Conflicts per Location')
+# plt.xlabel('Location')
+# plt.ylabel('Number of Conflicts')
+# plt.xticks(rotation=90)
+# plt.bar(num_conflicts_location.index, num_conflicts_location['Number of Conflicts'])
+# plt.show()
 
 # Kmeans clustering
 from sklearn.cluster import KMeans
@@ -105,13 +105,29 @@ num_conflicts_location['Cluster'] = kmeans.labels_
 print(num_conflicts_location.head())
 
 # plot the clusters with seaborn
-plt.figure(figsize=(20, 10))
-plt.title('Number of Conflicts per Location')
-plt.xlabel('Location')
-plt.ylabel('Number of Conflicts')
-plt.xticks(rotation=90)
-sns.barplot(x=num_conflicts_location.index, y=num_conflicts_location['Number of Conflicts'], hue=num_conflicts_location['Cluster'])
-plt.show()
+# plt.figure(figsize=(20, 10))
+# plt.title('Number of Conflicts per Location')
+# plt.xlabel('Location')
+# plt.ylabel('Number of Conflicts')
+# plt.xticks(rotation=90)
+# sns.barplot(x=num_conflicts_location.index, y=num_conflicts_location['Number of Conflicts'], hue=num_conflicts_location['Cluster'])
+# plt.show()
+
+# checking if mil_exp and num_conflicts have the same countries
+print(len(num_conflicts_location.index))
+print(len(total_mil_exp['Country']))
+
+
+
+# adding another feature to the dataframe
+# total military expenditure per country
+total_mil_exp = total_mil_exp.set_index('Country')
+num_conflicts_location = num_conflicts_location.join(total_mil_exp)
+num_conflicts_location = num_conflicts_location.dropna()
+num_conflicts_location['Total Military Expenditure'] = num_conflicts_location['Total Military Expenditure'].astype(float)
+num_conflicts_location['Total Military Expenditure'] = num_conflicts_location['Total Military Expenditure'].astype(int)
+print(num_conflicts_location.loc['United States of America'])
+
 
 
 
