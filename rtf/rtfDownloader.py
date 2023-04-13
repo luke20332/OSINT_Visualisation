@@ -46,7 +46,7 @@ payload = {'include_open_deals': 'on',
 r = requests.post(request_url, data=payload)
 
 # save it to a file 
-file = open("rtf\Trade-Register-{}-{}-downloaded.txt".format(yearMin, yearMax), "w")
+file = open("rtf\Trade-Register-{}-{}-downloaded.rtf".format(yearMin, yearMax), "w")
 file.write(r.text)
 
 file.close()
