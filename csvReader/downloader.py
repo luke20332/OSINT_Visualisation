@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup as bs
 import datetime
 
+
+
+
 #Get date today for file
 day = datetime.datetime.today().strftime('%d-%m-%Y')
 
@@ -13,6 +16,15 @@ soup = bs(htmlResponse, 'html.parser')
 years = soup.find_all('select', {'name':'low_year'})[0].find_all('option')
 yearMax = years[1].text
 yearMin = years[-1].text
+
+#Check if max year is current year in date.txt
+file = open("date.txt", "r")
+fileLines = file.readlines()
+file.close()
+if fileLines[0] == yearMax:
+    print("No new data to download")
+    exit()
+
 
 
 #Start the file ouput - Just to setup what would usually be in the file if the site didn't crash on these large requests
@@ -55,3 +67,13 @@ for yr in range(int(yearMin),int(yearMax)+1):
         print(f"Data finished for {yr}")
 
 file.close()
+
+print("Data finished for all years")
+print("Updating date.txt")
+
+#Update date.txt
+file = open("date.txt", "w")
+file.write(yearMax)
+file.close()
+
+print("Finished")
