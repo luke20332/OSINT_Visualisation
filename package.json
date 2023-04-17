@@ -2,6 +2,7 @@
   "name": "firstapp",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@react-native-community/slider": "^4.4.2",
     "@testing-library/jest-dom": "^5.16.5",
