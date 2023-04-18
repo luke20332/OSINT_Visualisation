@@ -225,11 +225,10 @@ print(df['clusters'].value_counts())
 
 #export data with clusters
 #df.to_csv('milex-conflict-clusters.csv', index=False
-"""
+
 sns.scatterplot(x='expenditure', y='conflict', hue='clusters', data = df)
 plt.savefig('milex-conflict-clusters.png')
 plt.show()
-"""
 
 # cross validation
 
