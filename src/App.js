@@ -124,6 +124,8 @@ function sliderDataLoad(value){
   //Print List of ids in range
   //console.log(idsIndexs);
 
-  
+  //For joined data
+  //for each id get year 
+  // id .year
 
 }
