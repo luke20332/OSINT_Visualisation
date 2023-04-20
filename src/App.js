@@ -4,6 +4,8 @@ import map from "./wrld-15-crop.jpg"
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
+import ids from './data/ids.json';
+import data from './data/joined_data.csv';
 
 
 // root of application
@@ -48,7 +50,7 @@ export default function App() {
         value = {1950}
         onValueChange = {value => setRange(parseInt(value))}
         onSlidingStart={() => setSliding('Calculating...')}
-        onSlidingComplete={console.log(value)}
+        onSlidingComplete={value => sliderDataLoad(value)}
 
       />
       <StatusBar style = 'auto'/>
@@ -68,3 +70,12 @@ const styles = StyleSheet.create({
 });
 
 //export default App;
+
+
+function sliderDataLoad(value){
+  console.log(value);
+
+  //Check ids and combined data are loaded
+  console.log(ids);
+  console.log(data);
+}
