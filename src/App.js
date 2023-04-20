@@ -8,6 +8,7 @@ import ids from './data/IDs.json';
 import data from './data/joined_data.json';
 
 const idsRange = idsToDateRange();
+const dateRange = dataRange();
 
 // root of application
 // write the HTML heere
@@ -97,6 +98,24 @@ function idsToDateRange(){
   return dateRange;
 }
 
+function dataRange(){
+  console.log("Starting data parse");
+
+  const dataKeys = Object.keys(data);
+  var dataRange = [];
+  for (var i = 0; i < dataKeys.length; i++){
+    var deal = data[dataKeys[i]];
+    //console.log(deal);
+    var date = deal['Order date'];
+    //console.log(date);
+    dataRange.push({'id':dataKeys[i],'date':date});
+  
+  }
+  console.log("Finished data parse");
+  return dataRange;
+
+}
+
 
 function sliderDataLoad(value){
   console.log(value);
@@ -109,7 +128,7 @@ function sliderDataLoad(value){
   // console.log(ids);
   // console.log(data);
 
-  //Chcek ids range
+  //Check ids range
   //console.log(idsRange);
 
   //Find the correct ids index
@@ -126,6 +145,18 @@ function sliderDataLoad(value){
 
   //For joined data
   //for each id get year 
-  // id .year
+
+  //Check data range
+  //console.log(dateRange);
+  var dataIndexs = [];
+  for (var i = 0; i < dateRange.length; i++){
+    var date = dateRange[i].date;
+    if (parseInt(date) == value){
+      dataIndexs.push(i);
+    }
+  }
+
+  //Print List of data in range
+  //console.log(dataIndexs);
 
 }
