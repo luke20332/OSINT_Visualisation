@@ -4,8 +4,8 @@ import map from "./wrld-15-crop.jpg"
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
-import ids from './data/ids.json';
-import data from './data/joined_data.csv';
+import ids from './data/IDs.json';
+import data from './data/joined_data.json';
 
 
 // root of application
