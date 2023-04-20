@@ -7,6 +7,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import ids from './data/IDs.json';
 import data from './data/joined_data.json';
 
+const idsRange = idsToDateRange();
 
 // root of application
 // write the HTML heere
@@ -72,10 +73,57 @@ const styles = StyleSheet.create({
 //export default App;
 
 
+function idsToDateRange(){
+  console.log("Starting ID parse");
+  var dateRange = [];
+  for (var i = 0; i < ids.length; i++){
+    var from = ids[i].from;
+    var to = ids[i].to;
+    
+    try{
+      var fromYear = parseInt(from.substring(0,4));
+    }catch(err){
+      var fromYear = 0;
+    }
+
+    try{
+      var toYear = parseInt(to.substring(0,4));
+    }catch(err){
+      var toYear = 0;
+    }
+    dateRange.push({'from':fromYear, 'to':toYear});
+  }
+  console.log("Finished ID parse");
+  return dateRange;
+}
+
+
 function sliderDataLoad(value){
   console.log(value);
 
+  //Convert value to an int
+  value = parseInt(value);
+
+
   //Check ids and combined data are loaded
-  console.log(ids);
-  console.log(data);
+  // console.log(ids);
+  // console.log(data);
+
+  //Chcek ids range
+  //console.log(idsRange);
+
+  //Find the correct ids index
+  var idsIndexs = [];
+  for (var i = 0; i < idsRange.length; i++){
+    var from = idsRange[i].from;
+    var to = idsRange[i].to;
+    if (value >= from && value <= to){
+      idsIndexs.push(i);
+    }
+  } 
+  //Print List of ids in range
+  //console.log(idsIndexs);
+
+  
+
 }
