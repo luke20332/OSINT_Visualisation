@@ -5,7 +5,8 @@ const Canvas = ({
     return (
         <canvas
             width={width}
-            height={height}/>
+            height={height}
+            style={canvasStyle}/>
     );
 }
 

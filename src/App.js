@@ -53,7 +53,7 @@ export default function App() {
         value = {1950}
         onValueChange = {value => setRange(parseInt(value))}
         onSlidingStart={() => setSliding('Calculating...')}
-        onSlidingComplete={console.log(value)}
+        onSlidingComplete={value => console.log(value)}
 
       />
       <StatusBar style = 'auto'/>
