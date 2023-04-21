@@ -10,7 +10,16 @@ import { fromUrl } from 'geotiff';
 
 const idsRange = idsToDateRange();
 const dateRange = dataRange();
-var image, tiff = await loadTiff();
+var bbox, width, height= await loadTiff();
+//bbox[0] - Left/W
+//bbox[1] - Bottom/S
+//bbox[2] - Right/E
+//bbox[3] - Top/N
+const west = toRadians(bbox[0]);
+const south = toRadians(bbox[1]);
+const east = toRadians(bbox[2]);
+const north = toRadians(bbox[3]);
+//  REF https://stackoverflow.com/questions/41557891/convert-lat-long-to-x-y-position-within-a-bounding-box
 
 
 // root of application
@@ -34,6 +43,13 @@ var image, tiff = await loadTiff();
 
 export default function App() {
   
+  console.log("Starting App");
+  console.log(bbox);
+
+
+
+
+
   const [range, setRange] = useState('1950');
   const [sliding, setSliding] = useState('');
 
@@ -85,12 +101,14 @@ function idsToDateRange(){
     try{
       var fromYear = parseInt(from.substring(0,4));
     }catch(err){
+      // eslint-disable-next-line no-redeclare
       var fromYear = 0;
     }
 
     try{
       var toYear = parseInt(to.substring(0,4));
     }catch(err){
+      // eslint-disable-next-line no-redeclare
       var toYear = 0;
     }
     dateRange.push({'from':fromYear, 'to':toYear});
@@ -166,14 +184,33 @@ async function loadTiff(){
 
   const url = 'NE1_LR_LC.tif';
   const tiff = await fromUrl(url);
-  console.log(tiff);
   const image = await tiff.getImage();
-  console.log(image);
-  const width = image.getWidth();
-  const height = image.getHeight();
-  const imageData = await image.readRasters();
-  console.log(imageData);
-  console.log("Done");
-  return image,tiff;
+  const bbox = image.getBoundingBox();
+  const x = image.getWidth();
+  const y = image.getHeight();
+  return [bbox, x, y];
 
+}
+
+function toRadians (deg) {
+  return deg * (Math.PI/180);
+}
+
+function latLongToPixel(lat,long){
+  lat = toRadians(lat);
+  long = toRadians(long);
+  const yMin = mecatorY(south);
+  const yMax = mecatorY(north);
+  const xFactor = width/(east-west);
+  const yFactor = height/(yMax-yMin);
+
+  var y = mecatorY(lat);
+  var x = (long - west) * xFactor;
+  y = (yMax - y) * yFactor;
+  return [x,y];
+
+}
+
+function mecatorY(lat){
+  return Math.log(Math.tan(Math.PI/4 + lat/2));
 }
