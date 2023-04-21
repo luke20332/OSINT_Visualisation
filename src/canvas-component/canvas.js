@@ -8,6 +8,12 @@ const Canvas = ({
 
     const setCanvasRef = useOnDraw();
 
+    const handleClear = () => {
+        const canvas = setCanvasRef.current;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+
     return (
         <>
       <img src={map} className="Map" alt="world map" class="center" />
@@ -17,6 +23,7 @@ const Canvas = ({
         style={canvasStyle}
         ref={setCanvasRef}
       />
+      <button onClick={handleClear}>Clear</button>
     </>
     );
 }
