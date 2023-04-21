@@ -23,7 +23,7 @@ const Canvas = ({
         style={canvasStyle}
         ref={setCanvasRef}
       />
-      <button onClick={handleClear}>Clear</button>
+      <button onClick={handleClear}>Clear map</button>
     </>
     );
 }
