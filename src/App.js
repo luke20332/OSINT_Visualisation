@@ -1,16 +1,17 @@
 import React, {useRef, useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
-//import map from "./wrld-15-crop.jpg"
+import map from "./NE1_LR_LC.png";
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
 import ids from './data/IDs.json';
 import data from './data/joined_data.json';
-import GeoTIFF, { fromUrl, fromUrls, fromArrayBuffer, fromBlob } from 'geotiff';
+import { fromUrl } from 'geotiff';
 
 const idsRange = idsToDateRange();
 const dateRange = dataRange();
-await loadTiff();
+var image, tiff = await loadTiff();
+
 
 // root of application
 // write the HTML heere
@@ -36,11 +37,9 @@ export default function App() {
   const [range, setRange] = useState('1950');
   const [sliding, setSliding] = useState('');
 
-  
-
   return (
     <View style={styles.container}>
-      <img src={'%PUBLIC_URL%/NE1_LR_LC.tif'} className="Map" alt="world map" class = "center" />
+      <img src = {map} className="Map" alt="world map" class = "center" />
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
 
@@ -165,14 +164,16 @@ function sliderDataLoad(value){
 
 async function loadTiff(){
 
-  const url = '%PUBLIC_URL%/NE1_LR_LC.tif';
-  const tiff = await GeoTIFF.fromUrl(url);
+  const url = 'NE1_LR_LC.tif';
+  const tiff = await fromUrl(url);
   console.log(tiff);
   const image = await tiff.getImage();
+  console.log(image);
   const width = image.getWidth();
   const height = image.getHeight();
   const imageData = await image.readRasters();
   console.log(imageData);
   console.log("Done");
+  return image,tiff;
 
 }
