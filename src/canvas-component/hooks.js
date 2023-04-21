@@ -6,6 +6,14 @@ export function useOnDraw() {
     function setCanvasRef(ref) {
         if(!ref) return;
         canvasRef.current = ref;
+        getPixelLocation();
+    }
+
+    function getPixelLocation() {
+        const mouseListener = (e) => {
+            console.log({x: e.clientX, y : e.clientY});
+        }
+        window.addEventListener("pixelLocation", mouseListener);
     }
     
     return setCanvasRef;

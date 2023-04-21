@@ -36,10 +36,9 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Canvas 
-        width={700}
-        height={500}
+        width={900}
+        height={750}
       />
-      <img src={map} className="Map" alt="world map" class = "center" />
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
 
