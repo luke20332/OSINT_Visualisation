@@ -37,14 +37,14 @@ milex20 = cleaned_dict.popitem()[1]
 keys = cleaned_dict.keys()
 values = cleaned_dict.values()
 
-"""
+
 fig, ax = plt.subplots(figsize=(6,4))
 #fig = plt.figure(figsize=(20,10))
 ax.scatter(keys, values)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 plt.show()
-"""
+
 
 # time for some linear regression baby 
 

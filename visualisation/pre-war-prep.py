@@ -55,8 +55,73 @@ df = df.sort_values(["years"])
 
 ucdp_num_conflicts_year = prio_df.groupby('year')['conflict_id'].count()
 #ucdp_num_conflicts_year = ucdp_num_conflicts_year.sort_values(ascending=False)
-print(ucdp_num_conflicts_year.values[4:]) # yearly number of conflicts from 1950 onwards
+#print(ucdp_num_conflicts_year.values[4:]) # yearly number of conflicts from 1950 onwards
 
 df["conflict"] = ucdp_num_conflicts_year.values[3:]
 
-print(df.head)
+#print(df.head)
+
+# the testing dataframes - pre conflict
+
+df_pre_67 = df.iloc[:18,:]
+df_post_67 = df.iloc[18:,:]
+
+df_pre_91 = df.iloc[:39,:]
+df_post_91 = df.iloc[39:,:]
+
+df_pre_15 = df.iloc[:66,:]
+df_post_15 = df.iloc[66:,:]
+
+
+df_pre_80 = df.iloc[:30,:]
+df_post_80 = df.iloc[30:,:]
+
+print(df_pre_80)
+
+"""
+fig, ax = plt.subplots(figsize=(6,4))
+ax.scatter(df['years'], df['conflict'])
+ax.plot(df['years'], df['conflict'])
+ax.set_xlabel('Years')
+ax.set_ylabel('Conflicts')
+plt.show()
+"""
+
+# got the splitted dataframes, now need to linear regression on teh expendituere
+# data so that if similar trends are present then conflict is likely - or will spike
+
+regr67 = LinearRegression()
+regr67.fit(np.array(list(df_pre_67['years'])).astype(float).reshape(-1,1), np.array(list(df_pre_67['conflict'])).astype(float))
+
+print("sklearn's prediction for weight and bias")
+print('w_1 = {:.2f}'.format(regr67.coef_.item()))
+print('b = {:.2f}'.format(regr67.intercept_.item()))
+
+y_pred_67 = regr67.predict(np.array(list(df['years'])).astype(float).reshape(-1,1))
+
+regr91 = LinearRegression()
+regr91.fit(np.array(list(df_pre_91['years'])).astype(float).reshape(-1,1), np.array(list(df_pre_91['conflict'])).astype(float))
+
+print("sklearn's prediction for weight and bias")
+print('w_1 = {:.2f}'.format(regr91.coef_.item()))
+print('b = {:.2f}'.format(regr91.intercept_.item()))
+
+y_pred_91 = regr91.predict(np.array(list(df['years'])).astype(float).reshape(-1,1))
+
+regr15 = LinearRegression()
+regr15.fit(np.array(list(df_pre_15['years'])).astype(float).reshape(-1,1), np.array(list(df_pre_15['conflict'])).astype(float))
+
+print("sklearn's prediction for weight and bias")
+print('w_1 = {:.2f}'.format(regr15.coef_.item()))
+print('b = {:.2f}'.format(regr15.intercept_.item()))
+
+y_pred_15 = regr15.predict(np.array(list(df['years'])).astype(float).reshape(-1,1))
+
+
+fig,ax = plt.subplots(figsize=(6,4))
+ax.scatter(df['years'],df['conflict'])
+ax.plot(df['years'], y_pred_67, y_pred_91, y_pred_15)
+#ax.plot(df['years'],df['expenditure'])
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.show()
