@@ -1,27 +1,9 @@
 import React, {useRef, useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
-import map from "./wrld-15-crop.jpg"
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
 import Canvas from './canvas-component/canvas'
-
-
-// root of application
-// write the HTML heere
-
-// react manages state, if state chanes, it rerenders
-// redner to dos, so if anythign changes, it rerenders.
-
-// use state hook
-// const []
-// useState returns an array
-// first element is the list of todos 
-// second element is the function which changes the todos
-// object destructuring
-
-// todos = all the todos in the state
-// settodos = what we use to change the,
 
 
 
@@ -70,5 +52,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-
-//export default App;
