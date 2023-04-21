@@ -4,6 +4,7 @@ import map from "./wrld-15-crop.jpg"
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
+import Canvas from './canvas-component/canvas'
 
 
 // root of application
@@ -37,6 +38,10 @@ export default function App() {
       <img src={map} className="Map" alt="world map" class = "center" />
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
+      <Canvas 
+        width={700}
+        height={500}
+      />
 
       <Slider
         style={{ width:1000, height: 40}}
