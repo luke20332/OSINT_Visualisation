@@ -6,11 +6,15 @@ import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
 import ids from './data/IDs.json';
 import data from './data/joined_data.json';
-import { fromUrl } from 'geotiff';
+import { fromUrl,fromArrayBuffer } from 'geotiff';
 
 const idsRange = idsToDateRange();
 const dateRange = dataRange();
-var bbox, width, height= await loadTiff();
+var tiffReply = await loadTiff();
+const bbox = tiffReply[0];
+const width = tiffReply[1];
+const height = tiffReply[2];
+
 //bbox[0] - Left/W
 //bbox[1] - Bottom/S
 //bbox[2] - Right/E
@@ -52,7 +56,7 @@ export default function App() {
 
   const [range, setRange] = useState('1950');
   const [sliding, setSliding] = useState('');
-
+  console.log("Finished App");
   return (
     <View style={styles.container}>
       <img src = {map} className="Map" alt="world map" class = "center" />
@@ -177,6 +181,7 @@ function sliderDataLoad(value){
 
   //Print List of data in range
   //console.log(dataIndexs);
+  console.log(latLongToPixel(51.507351, -0.127758 ));
 
 }
 
@@ -188,6 +193,8 @@ async function loadTiff(){
   const bbox = image.getBoundingBox();
   const x = image.getWidth();
   const y = image.getHeight();
+
+  console.log(image.geoKeys)
   return [bbox, x, y];
 
 }
