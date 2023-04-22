@@ -14,6 +14,7 @@ var tiffReply = await loadTiff();
 const bbox = tiffReply[0];
 const width = tiffReply[1];
 const height = tiffReply[2];
+const projection = tiffReply[3];
 
 //bbox[0] - Left/W
 //bbox[1] - Bottom/S
@@ -180,8 +181,12 @@ function sliderDataLoad(value){
   }
 
   //Print List of data in range
-  //console.log(dataIndexs);
-  console.log(latLongToPixel(51.507351, -0.127758 ));
+
+  console.log("New function")
+  //Testing new function on a single point located in Syndey
+  const x = getX(151); // 151 = Long
+  const y = getY(-33.8); //--33.8 = Lat
+  console.log(x,y);
 
 }
 
@@ -194,30 +199,15 @@ async function loadTiff(){
   const x = image.getWidth();
   const y = image.getHeight();
 
-  console.log(image.geoKeys)
   return [bbox, x, y];
 
 }
 
-function toRadians (deg) {
-  return deg * (Math.PI/180);
+function getX(longitude){
+  const x = width * ((180+longitude) / 360);
+  return x;
 }
-
-function latLongToPixel(lat,long){
-  lat = toRadians(lat);
-  long = toRadians(long);
-  const yMin = mecatorY(south);
-  const yMax = mecatorY(north);
-  const xFactor = width/(east-west);
-  const yFactor = height/(yMax-yMin);
-
-  var y = mecatorY(lat);
-  var x = (long - west) * xFactor;
-  y = (yMax - y) * yFactor;
-  return [x,y];
-
-}
-
-function mecatorY(lat){
-  return Math.log(Math.tan(Math.PI/4 + lat/2));
+function getY(latitude){
+  const y  = height * ((90-latitude) / 180);
+  return y;
 }
