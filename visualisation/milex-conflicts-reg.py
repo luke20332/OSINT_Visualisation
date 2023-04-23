@@ -140,14 +140,13 @@ regr.fit(x_poly, df['conflict'])
 x_plot = np.linspace(min(df['expenditure']),max(df['expenditure']),73).reshape(-1, 1)
 y_pred_poly = regr.predict(poly.transform(x_plot))
 
-"""
+
 fig, ax = plt.subplots(figsize=(6,4))
 ax.scatter(df['expenditure'], df['conflict'])
 ax.plot(x_plot, y_pred_poly, '-r')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 plt.show()
-"""
 
 print("We get a mean squared error of {} with a polynomial linear regression model".format(mean_squared_error(df['conflict'],y_pred_poly)))
 
@@ -201,7 +200,7 @@ print("The median for total conflicts in a year is {}".format(df['conflict'].med
 # k means clustering to find what is deemed as low, medium and high levels of expenditure
 # or i could just do percentiles
 
-print(df.describe())
+#print(df.describe())
 
 
 #sns.pairplot(df[['years','expenditure','conflict']])
@@ -219,7 +218,7 @@ kmeans = kmeans.fit(df[['expenditure', 'conflict']])
 #automatically assigns to relevant clustern
 df['clusters'] = kmeans.labels_
 
-print(df['clusters'].value_counts())
+#print(df['clusters'].value_counts())
 
 
 
@@ -242,12 +241,12 @@ e_net.fit(np.array(x_train).reshape(-1,1), np.array(y_train).reshape(-1,1))
 
 y_pred = e_net.predict(np.array(x_test).reshape(-1,1))
 
-print(y_pred)
+#print(y_pred)
 
-print("Slope: %.2f" % e_net.coef_[0])
-print("Intercept = {}".format(e_net.intercept_[0]))
+#print("Slope: %.2f" % e_net.coef_[0])
+#print("Intercept = {}".format(e_net.intercept_[0]))
 
-print("MSE = {}".format(mean_squared_error(y_test, y_pred)))
+#print("MSE = {}".format(mean_squared_error(y_test, y_pred)))
 
 
 x_plot = np.linspace(min(df['expenditure']),max(df['expenditure']),15).reshape(-1, 1)
@@ -260,5 +259,62 @@ ax.set_ylabel('y')
 plt.show()
 
 
-# adjusting the dataframe to account for 'war prep'
+# Regressing conflict against time
 
+regr_conflict = LinearRegression()
+regr_conflict.fit(np.array(list(df['years'])).reshape(-1,1), np.array(list(df['conflict'])).reshape(-1,1))
+
+print("Linear regression weight = {} ".format(regr_conflict.coef_.item()))
+print("Linear regression bias = {}".format(regr_conflict.intercept_.item()))
+
+poly_conflict = PolynomialFeatures(degree=1)
+x_poly_conflict = poly_conflict.fit_transform(np.array(list(df['years'])).reshape(-1,1))
+regr_conflict.fit(x_poly_conflict, df['conflict'])
+
+x_plot_conflict = np.linspace(min(df['years']),max(df['years']),73).reshape(-1, 1)
+y_pred_poly_conflict = regr_conflict.predict(poly_conflict.transform(x_plot_conflict))
+
+
+fig, ax = plt.subplots(figsize=(6,4))
+ax.scatter(df['years'], df['conflict'])
+ax.plot(x_plot_conflict, y_pred_poly_conflict, '-r')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.show()
+
+
+pearsonsRconflict = r_regression(np.array(list(df['years'])).reshape(-1,1), df['conflict'])
+print("We get a Pearson's Correlation Coefficient of {}, which is suggests a strong positive correlation between global expenditure and total conflict around the world.".format(pearsonsRconflict[0]))
+
+print("The coefficient of determination for the linear model is {}".format(r2_score(df['conflict'],y_pred_poly_conflict)))
+
+
+print("REGRESSING EXPENDITURE AGAINST TIME")
+
+
+regr_exp = LinearRegression()
+regr_exp.fit(np.array(list(df['years'])).reshape(-1,1), np.array(list(df['expenditure'])).reshape(-1,1))
+
+print("Linear regression weight = {} ".format(regr_exp.coef_.item()))
+print("Linear regression bias = {}".format(regr_exp.intercept_.item()))
+
+poly_exp = PolynomialFeatures(degree=1)
+x_poly_exp = poly_exp.fit_transform(np.array(list(df['years'])).reshape(-1,1))
+regr_exp.fit(x_poly_exp, df['expenditure'])
+
+x_plot_exp = np.linspace(min(df['years']),max(df['years']),73).reshape(-1, 1)
+y_pred_poly_exp = regr_exp.predict(poly_exp.transform(x_plot_exp))
+
+
+fig, ax = plt.subplots(figsize=(6,4))
+ax.scatter(df['years'], df['expenditure'])
+ax.plot(x_plot_exp, y_pred_poly_exp, '-r')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.show()
+
+
+pearsonsRexp = r_regression(np.array(list(df['years'])).reshape(-1,1), df['expenditure'])
+print("We get a Pearson's Correlation Coefficient of {}, which is suggests a strong positive correlation between global expenditure and total conflict around the world.".format(pearsonsRexp[0]))
+
+print("The coefficient of determination for the linear model is {}".format(r2_score(df['expenditure'],y_pred_poly_exp)))
