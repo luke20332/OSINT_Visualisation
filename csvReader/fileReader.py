@@ -1,5 +1,6 @@
 import polars as pl
 import pandas as pd
+import re
 
 
 def read_csv_data(filename):
@@ -13,6 +14,26 @@ def read_csv_data(filename):
     df = pd.read_csv(filename, skiprows=5, delimiter=';', skipfooter=2, engine='python', encoding="ISO-8859-1")
 
     return pl.from_pandas(df)
+
+
+def replace_unicode_chars(df: pl.DataFrame, col_name: str) -> pl.Series:
+    # Get the column to be iterated
+    col = df[col_name]
+    regex = re.compile(r"\\u(\d+)\?")
+    # Iterate through each row in the column
+    for i, val in enumerate(col):
+        # Check if the value contains a unicode character
+        match = regex.search(val)
+        if match:
+            # Extract the unicode character code from the string
+            hex_code = val.split("\\u")[1].split("?")[0]
+            # Convert the hex code to an integer and then to its corresponding unicode character
+            char = chr(int(hex_code))
+
+            # Replace the original value with the new value containing the unicode character
+            col[i] = val.replace(match.group(), char)
+
+    return col
 
 
 def strip_strings(x):
@@ -43,12 +64,17 @@ def rtf_data_processing(df):
 
 def joinedTable(df_rtf, csv_df):
     processedDF = rtf_data_processing(df_rtf)
+    # remove possible spaces for the designations
+    csv_df = csv_df.with_columns(csv_df['Designation'].str.strip())
+
+    processedDF = processedDF.with_columns(replace_unicode_chars(df_rtf, "No. Designation"))
+    processedDF = processedDF.with_columns(replace_unicode_chars(df_rtf, "No. Comments"))
 
     joinedDF = csv_df.join(processedDF,
-                           left_on=['Seller', 'Buyer', 'Description',
+                           left_on=['Seller', 'Buyer',
                                     'Designation', 'Order date',
                                     ],
-                           right_on=["Supplier", "Recipient", "Weapon Description",
+                           right_on=["Supplier", "Recipient",
                                      "No. Designation", 'Year(s) Weapon of Order',
                                      ],
                            how="left")
