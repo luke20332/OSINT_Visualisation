@@ -7,6 +7,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import ids from './data/IDs.json';
 import data from './data/joined_data.json';
 import { fromUrl,fromArrayBuffer } from 'geotiff';
+import Canvas from './canvas-component/canvas'
 
 const idsRange = idsToDateRange();
 const dateRange = dataRange();
@@ -16,34 +17,8 @@ const width = tiffReply[1];
 const height = tiffReply[2];
 const projection = tiffReply[3];
 
-//bbox[0] - Left/W
-//bbox[1] - Bottom/S
-//bbox[2] - Right/E
-//bbox[3] - Top/N
-// const west = toRadians(bbox[0]);
-// const south = toRadians(bbox[1]);
-// const east = toRadians(bbox[2]);
-// const north = toRadians(bbox[3]);
-//  REF https://stackoverflow.com/questions/41557891/convert-lat-long-to-x-y-position-within-a-bounding-box
-
-
 // root of application
 // write the HTML heere
-
-// react manages state, if state chanes, it rerenders
-// redner to dos, so if anythign changes, it rerenders.
-
-// use state hook
-// const []
-// useState returns an array
-// first element is the list of todos 
-// second element is the function which changes the todos
-// object destructuring
-
-// todos = all the todos in the state
-// settodos = what we use to change the,
-
-
 
 
 export default function App() {
@@ -60,7 +35,10 @@ export default function App() {
   console.log("Finished App");
   return (
     <View style={styles.container}>
-      <img src = {map} className="Map" alt="world map" class = "center" />
+      <Canvas 
+        width={900}
+        height={750}
+      />
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
 
