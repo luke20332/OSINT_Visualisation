@@ -156,12 +156,15 @@ function sliderDataLoad(value){
   //console.log(idsRange);
 
   //Find the correct ids index
-  var idsIndexs = [];
+  var idsIndexs = {};
   for (var i = 0; i < idsRange.length; i++){
     var from = idsRange[i].from;
     var to = idsRange[i].to;
     if (value >= from && value <= to){
-      idsIndexs.push(i);
+      const name = ids[i].title;
+      if (not (idsIndexs.hasOwnProperty(name))){
+        idsIndexs[name] = ids[i].cnt;
+      }
     }
   } 
   //Print List of ids in range
@@ -173,12 +176,21 @@ function sliderDataLoad(value){
   //Check data range
   //console.log(dateRange);
   var dataIndexs = [];
+  const dataKeys = Object.keys(data);
   for (var i = 0; i < dateRange.length; i++){
     var date = dateRange[i].date;
     if (parseInt(date) == value){
-      dataIndexs.push(i);
+      
+      var deal = data[dataKeys[i]];
+      //console.log(deal);
+      var seller = deal.seller;
+      var buyer = deal.buyer;
+      dataIndexs.push({'id':dataKeys[i],'seller':seller, 'buyer':buyer});
     }
   }
+
+
+
 
   //Print List of data in range
 
