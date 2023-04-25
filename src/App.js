@@ -20,10 +20,10 @@ const projection = tiffReply[3];
 //bbox[1] - Bottom/S
 //bbox[2] - Right/E
 //bbox[3] - Top/N
-const west = toRadians(bbox[0]);
-const south = toRadians(bbox[1]);
-const east = toRadians(bbox[2]);
-const north = toRadians(bbox[3]);
+// const west = toRadians(bbox[0]);
+// const south = toRadians(bbox[1]);
+// const east = toRadians(bbox[2]);
+// const north = toRadians(bbox[3]);
 //  REF https://stackoverflow.com/questions/41557891/convert-lat-long-to-x-y-position-within-a-bounding-box
 
 
