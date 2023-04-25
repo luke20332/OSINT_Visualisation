@@ -1,6 +1,5 @@
 import React, {useRef, useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
-import map from "./NE1_LR_LC.png";
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
@@ -8,6 +7,9 @@ import ids from './data/IDs.json';
 import data from './data/joined_data.json';
 import { fromUrl,fromArrayBuffer } from 'geotiff';
 import Canvas from './canvas-component/canvas'
+import draw from './canvas-component/hooks'
+
+
 
 const idsRange = idsToDateRange();
 const dateRange = dataRange();
@@ -15,7 +17,8 @@ var tiffReply = await loadTiff();
 const bbox = tiffReply[0];
 const width = tiffReply[1];
 const height = tiffReply[2];
-const projection = tiffReply[3];
+
+const scale = 16.2
 
 // root of application
 // write the HTML heere
@@ -36,8 +39,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Canvas 
-        width={900}
-        height={750}
+        width={1000}
+        height={500}
       />
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
@@ -140,7 +143,7 @@ function sliderDataLoad(value){
     var to = idsRange[i].to;
     if (value >= from && value <= to){
       const name = ids[i].title;
-      if (not (idsIndexs.hasOwnProperty(name))){
+      if (! (idsIndexs.hasOwnProperty(name))){
         idsIndexs[name] = ids[i].cnt;
       }
     }
@@ -174,9 +177,12 @@ function sliderDataLoad(value){
 
   console.log("New function")
   //Testing new function on a single point located in Syndey
-  const x = getX(151); // 151 = Long
-  const y = getY(-33.8); //--33.8 = Lat
+  const x = parseInt(getX(151)/scale); // 151 = Long
+  const y = parseInt(getY(-33.8)/scale); //--33.8 = Lat
   console.log(x,y);
+
+
+  draw([x, y], [x,y]);
 
 }
 
@@ -184,6 +190,7 @@ async function loadTiff(){
 
   const url = 'NE1_LR_LC.tif';
   const tiff = await fromUrl(url);
+  console.log(tiff);
   const image = await tiff.getImage();
   const bbox = image.getBoundingBox();
   const x = image.getWidth();

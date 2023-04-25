@@ -1,5 +1,5 @@
 import { useOnDraw } from './hooks';
-import map from "./wrld-15-crop.jpg"
+import map from "./NE1_LR_LC.png"
 
 const Canvas = ({
     width,
