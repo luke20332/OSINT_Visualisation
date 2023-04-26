@@ -16,6 +16,8 @@ from sklearn.model_selection import train_test_split, cross_val_score
 
 from sklearn.linear_model import ElasticNet
 
+import math
+
 # Read the data
 data = pd.read_excel('conflicts\SIPRI-Milex-data-1949-2022.xlsx', sheet_name='Constant (2021) US$', index_col=0, header=5)
 data = data.drop(['Unnamed: 1', 'Notes'], axis=1)
@@ -63,6 +65,10 @@ df["conflict"] = ucdp_num_conflicts_year.values[3:]
 
 # the testing dataframes - pre conflict
 
+df['expenditure'] = df['expenditure'].apply(lambda x : math.log(x, 10))
+# converting the expenditure into logged form, since the expenditure is in the millions (although its actually trillionss)
+
+
 df_pre_10 = df.iloc[:61,:]
 df_post_10 = df.iloc[61:,:]
 
@@ -89,8 +95,8 @@ y_pred_10 = regr10.predict(np.array(list(df['expenditure'])).astype(float).resha
 
 
 # an attribute of the data, not the model
-#pearsonsR = r_regression(np.array(list(df_pre_10['expenditure'])).reshape(-1,1), df_pre_10['conflict'])
-#print("pre 2010 r = ".format(pearsonsR))
+pearsonsR = r_regression(np.array(list(df['expenditure'])).reshape(-1,1), df['conflict'])
+print("pre 2010 r = ".format(pearsonsR))
 
 print("We get a mean squared error of {} with a simple linear regression model".format(mean_squared_error(df['conflict'], y_pred_10)))
 
@@ -100,10 +106,8 @@ ax.plot(df['expenditure'], y_pred_10)
 #ax.plot(df['years'],df['expenditure'])
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-plt.savefig("linear-reg-prepost-2010.png")
+plt.savefig("linear-reg-prepost-2010-log.png")
 plt.show()
-
-
 
 
 
@@ -114,6 +118,7 @@ regr10.fit(x_poly_10, df_pre_10['conflict'])
 
 
 x_plot_10 = np.linspace(min(df['expenditure']),max(df['expenditure']),73).reshape(-1, 1)
+#61
 y_pred_poly = regr10.predict(poly_10.transform(x_plot_10))
 
 
