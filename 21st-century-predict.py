@@ -65,14 +65,14 @@ df["conflict"] = ucdp_num_conflicts_year.values[3:]
 
 # the testing dataframes - pre conflict
 
-df['expenditure'] = df['expenditure'].apply(lambda x : math.log(x, 10))
+#df['expenditure'] = df['expenditure'].apply(lambda x : math.log(x, 10))
 # converting the expenditure into logged form, since the expenditure is in the millions (although its actually trillionss)
 
 
 df_pre_10 = df.iloc[:61,:]
 df_post_10 = df.iloc[61:,:]
 
-print(df_post_10)
+#print(df_post_10)
 
 """
 fig, ax = plt.subplots(figsize=(6,4))
@@ -85,7 +85,7 @@ plt.show()
 
 
 regr10 = LinearRegression() # train on pre 2010 data
-regr10.fit(np.array(list(df_pre_10['expenditure'])).astype(float).reshape(-1,1), np.array(list(df_pre_10['conflict'])).astype(float))
+regr10.fit(np.array(list(df_pre_10['expenditure'])).astype(float).reshape(-1,1), np.array(list(df_pre_10['conflict'])).astype(float)) #also training the model
 
 print("sklearn's prediction for weight and bias")
 print('w_1 = {:.2f}'.format(regr10.coef_.item()))
@@ -102,17 +102,17 @@ print("We get a mean squared error of {} with a simple linear regression model".
 
 fig,ax = plt.subplots(figsize=(6,4))
 ax.scatter(df['expenditure'],df['conflict'])
-ax.plot(df['expenditure'], y_pred_10)
+ax.plot(df['expenditure'], y_pred_10, '-r')
 #ax.plot(df['years'],df['expenditure'])
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-plt.savefig("linear-reg-prepost-2010-log.png")
+plt.savefig("linear-reg-prepost-2010.png")
 plt.show()
 
 
 
 # training model on the pre 2010 data
-poly_10 = PolynomialFeatures(degree=2)
+poly_10 = PolynomialFeatures(degree=3)
 x_poly_10 = poly_10.fit_transform(np.array(list(df_pre_10['expenditure'])).reshape(-1,1))
 regr10.fit(x_poly_10, df_pre_10['conflict'])
 
@@ -128,5 +128,5 @@ ax.plot(x_plot_10, y_pred_poly, '-r')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 plt.show()
-
+plt.savefig("poly-reg-prepost-2010.png")
 print("We get a mean squared error of {} with a polynomial linear regression model".format(mean_squared_error(df['conflict'],y_pred_poly)))
