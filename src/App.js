@@ -7,7 +7,19 @@ import ids from './data/IDs.json';
 import data from './data/joined_data.json';
 import { fromUrl,fromArrayBuffer } from 'geotiff';
 import Canvas from './canvas-component/canvas'
-import draw from './canvas-component/hooks'
+//import useOnDraw from './canvas-component/hooks'
+
+const DrawOnCanvas = React.forwardRef((props, ref) => {
+  return (
+    <canvas
+      width={500}
+      height={350}
+      ref={ref}
+    ></canvas>
+  );
+});
+
+
 
 
 
@@ -24,12 +36,36 @@ const scale = 16.2
 // write the HTML heere
 
 
+
+
+
+
 export default function App() {
+  const myref = useRef(null);
+
+  function drawOnCanvas(color) {
+    let ctx = myref.current.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.fillRect(100, 100, 32, 32);
+  }
   
+  function callDrawOnCanvas(color) {
+    drawOnCanvas(color);
+  }
+
+  function updateCanvas(value){
+    sliderDataLoad(value)
+    callDrawOnCanvas('red');
+
+  }
+
   console.log("Starting App");
   console.log(bbox);
 
 
+
+
+  
 
 
 
@@ -38,6 +74,7 @@ export default function App() {
   console.log("Finished App");
   return (
     <View style={styles.container}>
+      <DrawOnCanvas ref={myref} />
       <Canvas 
         width={1000}
         height={500}
@@ -55,7 +92,7 @@ export default function App() {
         value = {1950}
         onValueChange = {value => setRange(parseInt(value))}
         onSlidingStart={() => setSliding('Calculating...')}
-        onSlidingComplete={value => sliderDataLoad(value)}
+        onSlidingComplete={value => updateCanvas(value)}
 
       />
       <StatusBar style = 'auto'/>
@@ -181,8 +218,6 @@ function sliderDataLoad(value){
   const y = parseInt(getY(-33.8)/scale); //--33.8 = Lat
   console.log(x,y);
 
-
-  draw([x, y], [x,y]);
 
 }
 
