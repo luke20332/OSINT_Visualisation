@@ -8,14 +8,16 @@ import data from './data/joined_data.json';
 import { fromUrl,fromArrayBuffer } from 'geotiff';
 import Canvas from './canvas-component/canvas'
 //import useOnDraw from './canvas-component/hooks'
+import map from "./world.png"
+// <img src={map} className="Map" alt="world map" class="center" />  
 
 const DrawOnCanvas = React.forwardRef((props, ref) => {
   return (
-    <canvas
-      width={500}
-      height={350}
-      ref={ref}
-    ></canvas>
+    
+      
+      <canvas  width={1000}  height={500}  ref={ref}  className="CanvasOverlay" id= "my-canvas">
+      </canvas>
+
   );
 });
 
@@ -46,7 +48,13 @@ export default function App() {
   function drawOnCanvas(color) {
     let ctx = myref.current.getContext("2d");
     ctx.fillStyle = color;
-    ctx.fillRect(100, 100, 32, 32);
+    const img = new Image()
+    img.src = map
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0)
+      ctx.fillRect(100, 100, 32, 32);
+    }
+    
   }
   
   function callDrawOnCanvas(color) {
@@ -59,6 +67,10 @@ export default function App() {
 
   }
 
+  
+
+
+
   console.log("Starting App");
   console.log(bbox);
 
@@ -68,17 +80,18 @@ export default function App() {
   
 
 
-
   const [range, setRange] = useState('1950');
   const [sliding, setSliding] = useState('');
   console.log("Finished App");
+
+
+
   return (
+    
     <View style={styles.container}>
+      
       <DrawOnCanvas ref={myref} />
-      <Canvas 
-        width={1000}
-        height={500}
-      />
+      { }
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
 
@@ -96,6 +109,13 @@ export default function App() {
 
       />
       <StatusBar style = 'auto'/>
+      <script type="text/javascript">
+        
+        const myCanvas = document.getElementById("my-canvas")
+        const myContext = myCanvas.getContext("2d")
+        myContext.drawImage(map,0,0)
+
+      </script>
     </View>
   );
 
