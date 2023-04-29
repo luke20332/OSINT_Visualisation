@@ -45,25 +45,45 @@ const scale = 16.2
 export default function App() {
   const myref = useRef(null);
 
-  function drawOnCanvas(color) {
+  function drawOnCanvas(data) {
     let ctx = myref.current.getContext("2d");
-    ctx.fillStyle = color;
+    ctx.fillStyle = 'red';
     const img = new Image()
     img.src = map
     img.onload = () => {
+
       ctx.drawImage(img, 0, 0)
-      ctx.fillRect(100, 100, 32, 32);
+      console.log("Drawing Image")
+      console.log(data)
+      for (var i = 0; i < data.length; i++){
+        var xS = data[i].xS;
+        var yS = data[i].yS;
+
+        var xB = data[i].xB;
+        var yB = data[i].yB;
+
+        ctx.beginPath();
+
+        ctx.moveTo(xS, yS);
+        ctx.lineTo(xB, yB);
+        ctx.stroke();
+
+
+
+        ctx.fillRect(xS-5, yS-5, 10,10);
+        ctx.fillRect(xB-5, yB-5, 10, 10);
+      }
     }
     
   }
   
-  function callDrawOnCanvas(color) {
-    drawOnCanvas(color);
+  function callDrawOnCanvas(data) {
+    drawOnCanvas(data);
   }
 
   function updateCanvas(value){
-    sliderDataLoad(value)
-    callDrawOnCanvas('red');
+    var data = sliderDataLoad(value);
+    callDrawOnCanvas(data);
 
   }
 
@@ -92,6 +112,13 @@ export default function App() {
       
       <DrawOnCanvas ref={myref} />
       { }
+      <script type="text/javascript">
+        
+        const myCanvas = document.getElementById("my-canvas")
+        const myContext = myCanvas.getContext("2d")
+        myContext.drawImage(map,0,0)
+
+      </script>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
 
@@ -109,13 +136,7 @@ export default function App() {
 
       />
       <StatusBar style = 'auto'/>
-      <script type="text/javascript">
-        
-        const myCanvas = document.getElementById("my-canvas")
-        const myContext = myCanvas.getContext("2d")
-        myContext.drawImage(map,0,0)
 
-      </script>
     </View>
   );
 
@@ -213,17 +234,38 @@ function sliderDataLoad(value){
 
   //Check data range
   //console.log(dateRange);
-  var dataIndexs = [];
+  var dataOut = [];
   const dataKeys = Object.keys(data);
   for (var i = 0; i < dateRange.length; i++){
     var date = dateRange[i].date;
     if (parseInt(date) == value){
       
       var deal = data[dataKeys[i]];
-      //console.log(deal);
-      var seller = deal.seller;
-      var buyer = deal.buyer;
-      dataIndexs.push({'id':dataKeys[i],'seller':seller, 'buyer':buyer});
+      console.log(deal);
+      var seller = deal.Seller;
+      var buyer = deal.Buyer;
+      console.log(seller);
+      var cnt = idsIndexs[seller];
+      if (cnt == undefined){
+        continue;
+      }
+      var long = cnt[0];
+      var lat = cnt[1];
+      var xS = parseInt(getX(long)/scale);
+      var yS = parseInt(getY(lat)/scale); 
+      cnt = idsIndexs[buyer];
+      if (cnt == undefined){
+        continue;
+      }
+      long = cnt[0];
+      lat = cnt[1];
+      var xB = parseInt(getX(long)/scale);
+      var yB = parseInt(getY(lat)/scale);
+    
+      dataOut.push({'id':dataKeys[i],'seller':seller, 'buyer':buyer, 'xS':xS, 'yS':yS, 'xB':xB, 'yB':yB});
+      
+
+
     }
   }
 
@@ -232,12 +274,12 @@ function sliderDataLoad(value){
 
   //Print List of data in range
 
-  console.log("New function")
+  //console.log("New function")
   //Testing new function on a single point located in Syndey
-  const x = parseInt(getX(151)/scale); // 151 = Long
-  const y = parseInt(getY(-33.8)/scale); //--33.8 = Lat
-  console.log(x,y);
-
+  //const x = parseInt(getX(151)/scale); // 151 = Long
+  //const y = parseInt(getY(-33.8)/scale); //--33.8 = Lat
+  //console.log(x,y);
+  return dataOut;
 
 }
 
