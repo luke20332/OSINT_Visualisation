@@ -55,6 +55,7 @@ export default function App() {
       ctx.drawImage(img, 0, 0)
       console.log("Drawing Image")
       console.log(data)
+      //Lines
       for (var i = 0; i < data.length; i++){
         var xS = data[i].xS;
         var yS = data[i].yS;
@@ -68,8 +69,17 @@ export default function App() {
         ctx.lineTo(xB, yB);
         ctx.stroke();
 
+        ctx.closePath();
 
+        
+      }
+      //Points
+      for (var i = 0; i < data.length; i++){
+        var xS = data[i].xS;
+        var yS = data[i].yS;
 
+        var xB = data[i].xB;
+        var yB = data[i].yB;
         ctx.fillRect(xS-5, yS-5, 10,10);
         ctx.fillRect(xB-5, yB-5, 10, 10);
       }
