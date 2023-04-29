@@ -20,6 +20,7 @@ const DrawOnCanvas = React.forwardRef((props, ref) => {
 
   );
 });
+        
 
 
 
@@ -88,9 +89,39 @@ export default function App() {
   function updateCanvas(value){
     var data = sliderDataLoad(value);
     callDrawOnCanvas(data);
+    updateTable(data);
 
   }
 
+  function updateTable(data){
+    var html =`
+    <table border='1' style='border-collapse:collapse'>
+    <thead>
+      <tr>
+        <th>Seller</th>
+        <th>Buyer</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+    `;
+    for (var i = 0; i < data.length; i++){
+      html += `
+      <tr>
+      <td style='text-align: center'>${data[i].seller}</td>
+      <td style='text-align: center'>${data[i].buyer}</td>
+      </tr>
+      `;
+    }
+    html += `
+    </tbody>
+    </table>
+    `;
+    document.getElementsByClassName("data")[0].innerHTML = html;
+
+
+
+  }
   
 
 
@@ -112,17 +143,14 @@ export default function App() {
 
   return (
     
+
+    
     <View style={styles.container}>
       
       <DrawOnCanvas ref={myref} />
       { }
-      <script type="text/javascript">
-        
-        const myCanvas = document.getElementById("my-canvas")
-        const myContext = myCanvas.getContext("2d")
-        myContext.drawImage(map,0,0)
 
-      </script>
+
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{range}</Text>
       <Text style={{ fontSize:20, fontWeight: 'bold' }}>{sliding}</Text>
 
@@ -135,12 +163,17 @@ export default function App() {
         thumbTintColor = 'tomato'
         value = {1950}
         onValueChange = {value => setRange(parseInt(value))}
-        onSlidingStart={() => setSliding('Calculating...')}
+        //onSlidingStart={() => setSliding('Calculating...')}
         onSlidingComplete={value => updateCanvas(value)}
 
       />
       <StatusBar style = 'auto'/>
+      Select a year using the slider above to get started
+      <p></p>
+      After selcting a year, the map will display the arms trade for that year as well as a table of these below
+      <p></p>
 
+      <div className="data"></div>
     </View>
   );
 
