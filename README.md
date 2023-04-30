@@ -31,6 +31,8 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `npm run build`
 
+Before running this, please replace `/node_modules/react-scripts\config\webpack.config.js` with the one found in the root directory
+
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
