@@ -3,13 +3,16 @@ import { StatusBar } from 'expo-status-bar';
 import './index.css';
 import Slider from '@react-native-community/slider';
 import { StyleSheet, Text, View } from 'react-native';
-import ids from './data/IDs.json';
-import data from './data/joined_data.json';
+
+
 import { fromUrl,fromArrayBuffer } from 'geotiff';
 import Canvas from './canvas-component/canvas'
 //import useOnDraw from './canvas-component/hooks'
 import map from "./world.png"
 // <img src={map} className="Map" alt="world map" class="center" />  
+
+const ids = require('./data/IDS.json');
+const data = require('./data/joined_data.json');
 
 const DrawOnCanvas = React.forwardRef((props, ref) => {
   return (
@@ -171,6 +174,8 @@ export default function App() {
       Select a year using the slider above to get started
       <p></p>
       After selcting a year, the map will display the arms trade for that year as well as a table of these below
+      <p></p>
+      Please note that only countries are displayed, and of these only ones that we have the geographic mapping for
       <p></p>
 
       <div className="data"></div>
